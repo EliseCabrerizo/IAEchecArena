@@ -11,64 +11,25 @@ public class Move {
 	static long NOT_ATTACK_OWN;
 	static long BLACK_NOT_ATTACK;
 	static long Attack_bits;
-	static long RANK_Masks[] = {
-
-			0xFF00000000000000L, 0xFF000000000000L, 0xFF0000000000L,
-
-			0xFF00000000L, 0xFF000000L, 0xFF0000L, 0xFF00L, 0xFFL
-
-	};
-	static long RANK_Masks_flip[] = {
-
-			0xFFL, 0xFF00L, 0xFF0000L, 0xFF000000L, 0xFF00000000L,
-
-			0xFF0000000000L, 0xFF000000000000L, 0xFF00000000000000L
-
-	};
-
-	static long FILE_Masks[] = {
-
-			0x0101010101010101L, 0x0202020202020202L, 0x0404040404040404L,
-
-			0x0808080808080808L, 0x1010101010101010L, 0x2020202020202020L,
-
-			0x4040404040404040L, 0x8080808080808080L
-
-	};
-
-	static long leftDiagonal_Mask[] = {
-
-			0x1L, 0x102L, 0x10204L, 0x1020408L, 0x102040810L, 0x10204081020L, 0x1020408102040L,
-
-			0x102040810204080L, 0x204081020408000L, 0x408102040800000L, 0x810204080000000L,
-
-			0x1020408000000000L, 0x2040800000000000L, 0x4080000000000000L, 0x8000000000000000L
-
-	};
-
-	static long rightDiagonal_Mask[] = {
-
-			0x80L, 0x8040L, 0x804020L, 0x80402010L, 0x8040201008L,
-
-			0x804020100804L, 0x80402010080402L, 0x8040201008040201L,
-
-			0x4020100804020100L, 0x2010080402010000L, 0x1008040201000000L,
-
-			0x804020100000000L, 0x402010000000000L, 0x201000000000000L,
-
-			0x100000000000000L
-
-	};
+	static long RANK_Masks[] = { 0xFF00000000000000L, 0xFF000000000000L, 0xFF0000000000L, 0xFF00000000L, 0xFF000000L,
+			0xFF0000L, 0xFF00L, 0xFFL };
+	static long RANK_Masks_flip[] = { 0xFFL, 0xFF00L, 0xFF0000L, 0xFF000000L, 0xFF00000000L, 0xFF0000000000L,
+			0xFF000000000000L, 0xFF00000000000000L };
+	static long FILE_Masks[] = { 0x0101010101010101L, 0x0202020202020202L, 0x0404040404040404L, 0x0808080808080808L,
+			0x1010101010101010L, 0x2020202020202020L, 0x4040404040404040L, 0x8080808080808080L };
+	static long leftDiagonal_Mask[] = { 0x1L, 0x102L, 0x10204L, 0x1020408L, 0x102040810L, 0x10204081020L,
+			0x1020408102040L, 0x102040810204080L, 0x204081020408000L, 0x408102040800000L, 0x810204080000000L,
+			0x1020408000000000L, 0x2040800000000000L, 0x4080000000000000L, 0x8000000000000000L };
+	static long rightDiagonal_Mask[] = { 0x80L, 0x8040L, 0x804020L, 0x80402010L, 0x8040201008L, 0x804020100804L,
+			0x80402010080402L, 0x8040201008040201L, 0x4020100804020100L, 0x2010080402010000L, 0x1008040201000000L,
+			0x804020100000000L, 0x402010000000000L, 0x201000000000000L, 0x100000000000000L };
 
 	// fait les masques pour determiner les cases accessible pour un mvt de tour
-
 	static long horNvertMoves(int pos) {
-
 		long s = 1L << pos;
 
 		long right_hor = Long.reverse(Long.reverse(OCCUPIED) - (Long.reverse(s) << 1)); // liste des position vide sur
-																						// la ligne a droite
-
+		// la ligne a droite
 		long left_hor = (OCCUPIED - (s << 1)); // idem a gauche
 
 		long hori_att = left_hor ^ right_hor; // position occupe sur la ligne
@@ -1027,837 +988,452 @@ public class Move {
 
 	}
 
+	public static String Bishop(Case[][] echiquier, boolean white) {
+		String move = "";
+		char c = white ? 'f' : 'F';
+
+		ArrayList<int[]> DepartureBox = calculDepartureBox(echiquier, c);
+
+		if (!DepartureBox.isEmpty()) {
+			for (int[] tab : DepartureBox) {
+				move += deplacementDiagonale(tab, white, echiquier);
+			}
+		}
+		return move;
+	}
+
+	public static String Rook(Case[][] echiquier, boolean white) {
+		String move = "";
+		char c = white ? 't' : 'T';
+
+		ArrayList<int[]> DepartureBox = calculDepartureBox(echiquier, c);
+
+		if (DepartureBox.isEmpty()) {
+			for (int[] tab : DepartureBox) {
+				move += deplacementCroix(tab, white, echiquier);
+			}
+		}
+		return move;
+	}
+
+	public static String Queen(Case[][] echiquier, boolean white) {
+		String move = "";
+		char c = white ? 'd' : 'D';
+
+		ArrayList<int[]> DepartureBox = calculDepartureBox(echiquier, c);
+
+		if (DepartureBox.isEmpty()) {
+			for (int[] tab : DepartureBox) {
+				move += deplacementDiagonale(tab, white, echiquier);
+				move += deplacementCroix(tab, white, echiquier);
+			}
+		}
+		return move;
+	}
+
+	public static String Pawn(Case[][] echiquier, boolean white) {
+		String move = "";
+		char c = white ? 'p' : 'P';
+		ArrayList<int[]> DepartureBox = calculDepartureBox(echiquier, c);
+
+		if (!DepartureBox.isEmpty()) {
+			for (int[] tab : DepartureBox) {
+				move += deplacementPion(tab, white, echiquier);
+			}
+		}
+		return move;
+	}
+
+	public static String King(Case[][] echiquier, boolean W) {
+		String move = "";
+		char c = W ? 'r' : 'R';
+
+		ArrayList<int[]> DepartureBox = calculDepartureBox(echiquier, c);
+
+		if (!DepartureBox.isEmpty()) {
+			for (int[] tab : DepartureBox) {
+
+				// Déplacement de 1 a droite et 1 en-haut
+				move += IntToString(tab[0], tab[1]) + caseEstDiponible(echiquier, tab[0] + 1, tab[1] + 1, W)[1];
+
+				// Déplacement de 1 a droite
+				move += IntToString(tab[0], tab[1]) + caseEstDiponible(echiquier, tab[0], tab[1] + 1, W)[1];
+
+				// Déplacement de 1 a droite et 1 en-bas
+				move += IntToString(tab[0], tab[1]) + caseEstDiponible(echiquier, tab[0] - 1, tab[1] + 1, W)[1];
+
+				// Déplacement de 1 en-bas
+				move += IntToString(tab[0], tab[1]) + caseEstDiponible(echiquier, tab[0] - 1, tab[1], W)[1];
+
+				// Déplacement de 1 en-bas et 1 a gauche
+				move += IntToString(tab[0], tab[1]) + caseEstDiponible(echiquier, tab[0] - 1, tab[1] - 1, W)[1];
+
+				// Déplacement de 1 a gauche
+				move += IntToString(tab[0], tab[1]) + caseEstDiponible(echiquier, tab[0], tab[1] - 1, W)[1];
+
+				// Déplacement de 1 a gauche et 1 en-haut
+				move += IntToString(tab[0], tab[1]) + caseEstDiponible(echiquier, tab[0] + 1, tab[1] - 1, W)[1];
+
+				// Déplacement de 1 en-haut
+				move += IntToString(tab[0], tab[1]) + caseEstDiponible(echiquier, tab[0] + 1, tab[1], W)[1];
+			}
+		}
+		return move;
+	}
+
+	public static String Knight(Case[][] echiquier, boolean W) {
+		String move = "";
+		char c = W ? 'c' : 'C';
+
+		ArrayList<int[]> DepartureBox = calculDepartureBox(echiquier, c);
+
+		if (!DepartureBox.isEmpty()) {
+			for (int[] tab : DepartureBox) {
+
+				// Déplacement de 2 a droite et 1 en-haut
+				move += IntToString(tab[0], tab[1]) + caseEstDiponible(echiquier, tab[0] + 1, tab[1] + 2, W)[1];
+
+				// Déplacement de 2 a droite et 1 en-bas
+				move += IntToString(tab[0], tab[1]) + caseEstDiponible(echiquier, tab[0] - 1, tab[1] + 2, W)[1];
+
+				// Déplacement de 2 en-bas et 1 a droite
+				move += IntToString(tab[0], tab[1]) + caseEstDiponible(echiquier, tab[0] - 2, tab[1] + 1, W)[1];
+
+				// Déplacement de 2 en-bas et 1 a gauche
+				move += IntToString(tab[0], tab[1]) + caseEstDiponible(echiquier, tab[0] - 2, tab[1] - 1, W)[1];
+
+				// Déplacement de 2 a gauche et 1 en-bas
+				move += IntToString(tab[0], tab[1]) + caseEstDiponible(echiquier, tab[0] - 1, tab[1] - 2, W)[1];
+
+				// Déplacement de 2 a gauche et 1 en-haut
+				move += IntToString(tab[0], tab[1]) + caseEstDiponible(echiquier, tab[0] + 1, tab[1] - 2, W)[1];
+
+				// Déplacement de 2 en-haut et 1 a gauche
+				move += IntToString(tab[0], tab[1]) + caseEstDiponible(echiquier, tab[0] + 2, tab[1] - 1, W)[1];
+
+				// Déplacement de 2 en-haut et 1 a droite
+				move += IntToString(tab[0], tab[1]) + caseEstDiponible(echiquier, tab[0] + 2, tab[1] + 1, W)[1];
+
+			}
+		}
+		return move;
+	}
+
+	/**
+	 * Parcours les trajectoires verticales et horizontales pour sauver la position
+	 * de depart et les position d'arrivee, determinees par les cases vides, les
+	 * pieces alliees bloquantes les pieces ennemies bloquantes mais qui euvent etre
+	 * mangee
+	 * 
+	 * @param tab
+	 *            Tableau contenant la position de depart i, j
+	 * @param white
+	 *            bouleen
+	 * @param echiquier
+	 * @return Un string contenant les multiples couples (la position de depart et
+	 *         la position d'arrivee)
+	 */
+	private static String deplacementCroix(int[] tab, boolean white, Case[][] echiquier) {
+		String move = "";
+		int i;
+		int j;
+		Object[] isEmpty_Moves = new Object[2];// premiere valeur : la case i j est vide. Deuxieme valeur : les
+												// mouvements possibles
+
+		// Déplacement haut
+		i = tab[0] + 1;
+		j = tab[1];
+		isEmpty_Moves[0] = true;
+		while (i < echiquier.length && (boolean) isEmpty_Moves[0]) {
+			isEmpty_Moves = caseEstDiponible(echiquier, i, j, white);
+			// aggregation de la position de depart et de la position d'arrivee
+			move += IntToString(tab[0], tab[1]) + isEmpty_Moves[1];
+			i++;
+		}
+
+		// Déplacement vers la bas
+		i = tab[0] - 1;
+		j = tab[1];
+		isEmpty_Moves[0] = true;
+		while (i >= 0 && (boolean) isEmpty_Moves[0]) {
+			isEmpty_Moves = caseEstDiponible(echiquier, i, j, white);
+			// aggregation de la position de depart et de la position d'arrivee
+			move += IntToString(tab[0], tab[1]) + isEmpty_Moves[1];
+			i--;
+		}
+
+		// Déplacement vers la droite
+		i = tab[0];
+		j = tab[1] + 1;
+		isEmpty_Moves[0] = true;
+		while (j < echiquier.length && (boolean) isEmpty_Moves[0]) {
+			isEmpty_Moves = caseEstDiponible(echiquier, i, j, white);
+			// aggregation de la position de depart et de la position d'arrivee
+			move += IntToString(tab[0], tab[1]) + isEmpty_Moves[1];
+			j++;
+		}
+
+		// Déplacement vers la gauche
+		i = tab[0];
+		j = tab[1] - 1;
+		isEmpty_Moves[0] = true;
+		while (j >= 0 && (boolean) isEmpty_Moves[0]) {
+			isEmpty_Moves = caseEstDiponible(echiquier, i, j, white);
+			// aggregation de la position de depart et de la position d'arrivee
+			move += IntToString(tab[0], tab[1]) + isEmpty_Moves[1];
+			j--;
+		}
+		return move;
+	}
+
+	/**
+	 * Parcours les trajectoires verticales et horizontales pour sauver la position
+	 * de depart et les position d'arrivee, determinees par les cases vides, les
+	 * pieces alliees bloquantes les pieces ennemies bloquantes mais qui euvent etre
+	 * mangee
+	 * 
+	 * @param tab
+	 * @param white
+	 *            bouleen
+	 * @param echiquier
+	 * @return Un string contenant les multiples couples (la position de depart et
+	 *         la position d'arrivee)
+	 */
+	private static String deplacementDiagonale(int[] tab, boolean white, Case[][] echiquier) {
+		String move = "";
+		int i;
+		int j;
+		// premiere valeur : la case i j est vide. Deuxieme valeur : les
+		// mouvements possibles
+		Object[] isEmpty_Moves = new Object[2];
+
+		// Déplacement diagonale haut droite
+		isEmpty_Moves[0] = true;
+		i = tab[0] + 1;
+		j = tab[1] + 1;
+		while (i < echiquier.length && j < echiquier.length && (boolean) isEmpty_Moves[0]) {
+			isEmpty_Moves = caseEstDiponible(echiquier, i, j, white);
+			move += IntToString(tab[0], tab[1]) + isEmpty_Moves[1];
+			i++;
+			j++;
+		}
+
+		// Déplacement diagonale haut gauche
+		isEmpty_Moves[0] = true;
+		i = tab[0] + 1;
+		j = tab[1] - 1;
+		while (i < echiquier.length && j >= 0 && (boolean) isEmpty_Moves[0]) {
+			isEmpty_Moves = caseEstDiponible(echiquier, i, j, white);
+			move += IntToString(tab[0], tab[1]) + isEmpty_Moves[1];
+			i++;
+			j--;
+		}
+
+		// Déplacement diagonale bas gauche
+		isEmpty_Moves[0] = true;
+		i = tab[0] - 1;
+		j = tab[1] - 1;
+		while (i >= 0 && j >= 0 && (boolean) isEmpty_Moves[0]) {
+			isEmpty_Moves = caseEstDiponible(echiquier, i, j, white);
+			move += IntToString(tab[0], tab[1]) + isEmpty_Moves[1];
+			i--;
+			j--;
+		}
+
+		// Déplacement diagonale bas droite
+		i = tab[0] - 1;
+		j = tab[1] + 1;
+		isEmpty_Moves[0] = true;
+		while (i >= 0 && j < echiquier.length && (boolean) isEmpty_Moves[0]) {
+			isEmpty_Moves = caseEstDiponible(echiquier, i, j, white);
+			move += IntToString(tab[0], tab[1]) + isEmpty_Moves[1];
+			i--;
+			j++;
+		}
+
+		return move;
+	}
+
+	private static String deplacementPion(int[] tab, boolean white, Case[][] echiquier) {
+		String move = "";
+		int i;
+		int j;
+		Object[] isEmpty_Moves = new Object[2];// premiere valeur : la case i j est vide. Deuxieme valeur : les
+												// mouvements possibles
+
+		// Les blancs montent
+		// Les noirs descendent
+		int monter = white ? 1 : -1;
+
+		// Deplamcement diagonale
+		// verticale de 1
+		i = tab[0] + monter;
+
+		// 1 a droite
+		j = tab[1] + 1;
+		isEmpty_Moves[0] = echiquier[i][j].isOccupe() == 'v'; // La case est vide, utile pour les boucles while
+		// La case n'est pas vide (ennemi ou allie)
+		if (!(Boolean) isEmpty_Moves[0]) {
+			// Si la case est occupee par un ennemi, on ajoute le deplacement sur l'ennemei
+			// aux deplacements possibles
+			if (isEnnemy(white, echiquier, i, j))
+				move += IntToString(tab[0], tab[1]) + IntToString(i, j);
+		}
+
+		// 1 a gauche
+		j = tab[1] - 1;
+		isEmpty_Moves[0] = echiquier[i][j].isOccupe() == 'v'; // La case est vide, utile pour les boucles while
+		// La case n'est pas vide (ennemi ou allie)
+		if (!(Boolean) isEmpty_Moves[0]) {
+			// Si la case est occupee par un ennemi, on ajoute le deplacement sur l'ennemei
+			// aux deplacements possibles
+			if (isEnnemy(white, echiquier, i, j))
+				move += IntToString(tab[0], tab[1]) + IntToString(i, j);
+		}
+
+		// Déplacement verticale
+		i = tab[0] + monter;
+		j = tab[1];
+		isEmpty_Moves[0] = true;
+
+		// Les pions blancs commencent en 1
+		// Les pions noirs commencent en 6
+		int positionDepartPion = white ? 1 : 6;
+		int deplacementMax = (tab[0] == positionDepartPion) ? 2 : 1;
+
+		// tant que le pion ne depasse pas la distance maximale
+		while (0 < i && i < echiquier.length && (boolean) isEmpty_Moves[0] && Math.abs(tab[0] - i) <= deplacementMax) {
+			isEmpty_Moves[0] = echiquier[i][j].isOccupe() == 'v'; // La case est vide, utile pour les boucles while
+			if ((boolean) isEmpty_Moves[0]) {
+				move += IntToString(tab[0], tab[1]) + IntToString(i, j);
+			}
+			i += monter;
+		}
+		return move;
+	}
+
+	/**
+	 * Sauve le deplacement uniquement si la case i j est vide ou si la case est
+	 * occupee par un ennemi.
+	 * 
+	 * @param echiquier
+	 *            L'echiquier
+	 * @param i
+	 * @param j
+	 * @param White
+	 * @return Un tableau contenant un booleen qui precise si la case est vide pour
+	 *         que les boucles while peuvent continuer a chercher dans cette
+	 *         direction et un String contenant "ij" si c'est une piece ennemi, qui
+	 *         peut etre mange
+	 */
+	public static Object[] caseEstDiponible(Case[][] echiquier, int i, int j, boolean white) {
+		Object[] toReturn = { null, "" };
+
+		toReturn[0] = echiquier[i][j].isOccupe() == 'v'; // La case est vide, utile pour les boucles while
+
+		// La case n'est pas vide (a cause d'un ennemi ou d'un allie)
+		if (!(Boolean) toReturn[0]) {
+			// Si la case est occupee par un ennemi, on ajoute le deplacement sur l'ennemei
+			// aux deplacements possibles
+			if (isEnnemy(white, echiquier, i, j))
+				toReturn[1] = IntToString(i, j);
+		} else {
+			// La case est vide, donc la piece peut s'y deplacer
+			toReturn[1] = IntToString(i, j);
+		}
+		return toReturn;
+
+		// Si la case est celle d'arrivée, qu'elle est prise mais que la couleur est
+		// celle de l'adversaire alors on peut déplacer
+		// if (echiquier[i][j].isOccupe() != 'v' &&
+		// Character.isUpperCase(echiquier[i][j].isOccupe())) {
+		// move = IntToString(i, j);
+		// toReturn = false;
+		// } // Si la case est prise on ne peut pasdéplacer
+		// else if (echiquier[i][j].isOccupe() != 'v')
+		// toReturn = false;
+		// else
+		// move = IntToString(i, j);
+
+	}
+
+	/**
+	 * @param i
+	 *            numero de la ligne
+	 * @param j
+	 *            numero de la colonne
+	 * @return Un String contenant i change en lettre et j incrémanté de 1. Exemple
+	 *         : "00" => "a1" ou "77" => "h8"
+	 */
 	public static String IntToString(int i, int j) {
+		if (!(0 <= i && i <= 7) || (0 <= j && j <= 7)) {
+			System.err.println("Depassement : i = " + i + ", j = " + j + "!!");
+		}
 		String aRetourner = "";
-		aRetourner = Character.toString((char) (4 + 'a'));
+		aRetourner = Character.toString((char) (i + 'a'));
 		aRetourner += (j + 1);
 		return aRetourner;
 	}
 
-	public static String Bishop(Case[][] echiquier, boolean W) {
-		String move = "";
-		char c = ' ';
-		if (W) {
-			c = 'f';
-		} else {
-			c = 'F';
-		}
-		int[] DepartureBox = new int[2];
-		boolean trouver=false;
-		for (int i = 0; i < echiquier.length&&!trouver; i++)
-			for (int j = 0; j < echiquier.length&&!trouver; j++) {
-				if (echiquier[i][j].isOccupe() == c) {
-					DepartureBox[0] = i;
-					DepartureBox[1] = j;
-					trouver=true;
-				}
-
-			}
-
-		boolean toReturn = true;
-
-		if (W) {
-			int i = DepartureBox[0]+1;
-			int j = DepartureBox[1]+1;
-			// Déplacement diagonale haut droite
-			while (i < echiquier.length && j < echiquier.length && toReturn) {
-				// Si la case est occupée par un noir, on ajoute le mouvement mais on s'arrête
-				// ensuite
-				if (echiquier[i][j].isOccupe() != 'v' && Character.isUpperCase(echiquier[i][j].isOccupe())) {
-					move.concat(IntToString(i, j));
-					toReturn = false;
-				}
-				// Si la case est occupée par un blanc, on s'arrête
-				else if (echiquier[i][j].isOccupe() != 'v') {
-					toReturn = false;
-				}
-				// Si la case est vide, on ajoute le mouvement
-				else {
-					move.concat(IntToString(i, j));
-				}
-				i++;
-				j++;
-			}
-			// Déplacement diagonale haut gauche
-			toReturn = true;
-			i=DepartureBox[0]+1;
-			j=DepartureBox[1]-1;
-			while (i < echiquier.length && j >= 0 && toReturn) {
-				// Si la case est occupée par un noir, on ajoute le mouvement mais on s'arrête
-				// ensuite
-				if (echiquier[i][j].isOccupe() != 'v' && Character.isUpperCase(echiquier[i][j].isOccupe())) {
-					move.concat(IntToString(i, j));
-					toReturn = false;
-				}
-				// Si la case est occupée par un blanc, on s'arrête
-				else if (echiquier[i][j].isOccupe() != 'v') {
-					toReturn = false;
-				}
-				// Si la case est vide, on ajoute le mouvement
-				else {
-					move.concat(IntToString(i, j));
-				}
-				i++;
-				j--;
-			}
-
-			// Déplacement diagonale bas gauche
-			i=DepartureBox[0]-1;
-			j=DepartureBox[1]-1;
-			toReturn = true;
-			while (i >= 0 && j >= 0 && toReturn) {
-				// Si la case est occupée par un noir, on ajoute le mouvement mais on s'arrête
-				// ensuite
-				if (echiquier[i][j].isOccupe() != 'v' && Character.isUpperCase(echiquier[i][j].isOccupe())) {
-					move.concat(IntToString(i, j));
-					toReturn = false;
-				}
-				// Si la case est occupée par un blanc, on s'arrête
-				else if (echiquier[i][j].isOccupe() != 'v') {
-					toReturn = false;
-				}
-				// Si la case est vide, on ajoute le mouvement
-				else {
-					move.concat(IntToString(i, j));
-				}
-				i--;
-				j--;
-			}
-			// Déplacement diagonale bas droite
-			toReturn = true;
-			i=DepartureBox[0]-1;
-			j=DepartureBox[1]+1;
-			while (i >= 0 && j < echiquier.length && toReturn) {
-				// Si la case est occupée par un noir, on ajoute le mouvement mais on s'arrête
-				// ensuite
-				if (echiquier[i][j].isOccupe() != 'v' && Character.isUpperCase(echiquier[i][j].isOccupe())) {
-					move.concat(IntToString(i, j));
-					toReturn = false;
-				}
-				// Si la case est occupée par un blanc, on s'arrête
-				else if (echiquier[i][j].isOccupe() != 'v') {
-					toReturn = false;
-				}
-				// Si la case est vide, on ajoute le mouvement
-				else {
-					move.concat(IntToString(i, j));
-				}
-				i--;
-				j++;
-			}
-		} else {
-			int i = DepartureBox[0]+1;
-			int j = DepartureBox[1]+1;
-			// Déplacement diagonale haut droite
-			while (i < echiquier.length && j < echiquier.length && toReturn) {
-				// Si la case est occupée par un blanc, on ajoute le mouvement mais on s'arrête
-				// ensuite
-				if (echiquier[i][j].isOccupe() != 'v' && Character.isLowerCase(echiquier[i][j].isOccupe())) {
-					move.concat(IntToString(i, j));
-					toReturn = false;
-				}
-				// Si la case est occupée par un noir, on s'arrête
-				else if (echiquier[i][j].isOccupe() != 'v') {
-					toReturn = false;
-				}
-				// Si la case est vide, on ajoute le mouvement
-				else {
-					move.concat(IntToString(i, j));
-				}
-				i++;
-				j++;
-			}
-			// Déplacement diagonale haut gauche
-			toReturn = true;
-			i=DepartureBox[0]+1;
-			j=DepartureBox[1]-1;
-			while (i < echiquier.length && j >= 0 && toReturn) {
-				// Si la case est occupée par un blanc, on ajoute le mouvement mais on s'arrête
-				// ensuite
-				if (echiquier[i][j].isOccupe() != 'v' && Character.isLowerCase(echiquier[i][j].isOccupe())) {
-					move.concat(IntToString(i, j));
-					toReturn = false;
-				}
-				// Si la case est occupée par un noir, on s'arrête
-				else if (echiquier[i][j].isOccupe() != 'v') {
-					toReturn = false;
-				}
-				// Si la case est vide, on ajoute le mouvement
-				else {
-					move.concat(IntToString(i, j));
-				}
-				i++;
-				j--;
-			}
-
-			// Déplacement diagonale bas gauche
-			toReturn = true;
-			i=DepartureBox[0]-1;
-			j=DepartureBox[1]-1;
-			while (i >= 0 && j >= 0 && toReturn) {
-				// Si la case est occupée par un blanc, on ajoute le mouvement mais on s'arrête
-				// ensuite
-				if (echiquier[i][j].isOccupe() != 'v' && Character.isLowerCase(echiquier[i][j].isOccupe())) {
-					move.concat(IntToString(i, j));
-					toReturn = false;
-				}
-				// Si la case est occupée par un noir, on s'arrête
-				else if (echiquier[i][j].isOccupe() != 'v') {
-					toReturn = false;
-				}
-				// Si la case est vide, on ajoute le mouvement
-				else {
-					move.concat(IntToString(i, j));
-				}
-				i--;
-				j--;
-			}
-			// Déplacement diagonale bas droite
-			toReturn = true;
-			i=DepartureBox[0]-1;
-			j=DepartureBox[1]+1;
-			while (i >= 0 && j < echiquier.length && toReturn) {
-				// Si la case est occupée par un blanc, on ajoute le mouvement mais on s'arrête
-				// ensuite
-				if (echiquier[i][j].isOccupe() != 'v' && Character.isLowerCase(echiquier[i][j].isOccupe())) {
-					move.concat(IntToString(i, j));
-					toReturn = false;
-				}
-				// Si la case est occupée par un noir, on s'arrête
-				else if (echiquier[i][j].isOccupe() != 'v') {
-					toReturn = false;
-				}
-				// Si la case est vide, on ajoute le mouvement
-				else {
-					move.concat(IntToString(i, j));
-				}
-				i--;
-				j++;
-			}
-		}
-		return move;
-	}
-
-	public static String Rook(Case[][] echiquier, boolean W) {
-		String move = "";
-		char c = ' ';
-		if (W) {
-			c = 't';
-		} else {
-			c = 'T';
-		}
-		int[] DepartureBox = new int[2];
-		boolean trouver=false;
-		for (int i = 0; i < echiquier.length&!trouver; i++)
-			for (int j = 0; j < echiquier.length&&!trouver; j++) {
-				if (echiquier[i][j].isOccupe() == c) {
-					DepartureBox[0] = i;
-					DepartureBox[1] = j;
-					trouver=true;
-				}
-
-			}
-		int i = DepartureBox[0];
-		int j = DepartureBox[1];
-		boolean toReturn = true;
-
-		if (W) {
-			// Déplacement vers le haut
-			for (int k =i+1; k < echiquier.length && toReturn; k++) {
-				// Si la case est celle d'arrivée, qu'elle est prise mais que la couleur est
-				// celle de l'adversaire alors on peut déplacer
-				if (echiquier[k][j].isOccupe() != 'v' && Character.isUpperCase(echiquier[k][j].isOccupe())) {
-					move = IntToString(k, j);
-					toReturn = false;
-				}
-				// Si la case est prise on ne peut pas déplacer
-				else if (echiquier[k][j].isOccupe() != 'v')
-					toReturn = false;
-				else
-					move = IntToString(k, j);
-			}
-
-			// Déplacement vers la bas
-			toReturn = true;
-			for (int k = i-1; k >= 0 && toReturn; k--) {
-				// Si la case est celle d'arrivée, qu'elle est prise mais que la couleur est
-				// celle de l'adversaire alors on peut déplacer
-				if (echiquier[k][j].isOccupe() != 'v' && Character.isUpperCase(echiquier[k][j].isOccupe())) {
-					move = IntToString(k, j);
-					toReturn = false;
-				}
-				// Si la case est prise on ne peut pas déplacer
-				else if (echiquier[k][j].isOccupe() != 'v')
-					toReturn = false;
-				else
-					move = IntToString(k, j);
-			}
-			// Déplacement vers la droite
-			toReturn = true;
-			for (int l = j+1; l < echiquier.length && toReturn; l++) {
-				if (echiquier[i][l].isOccupe() != 'v' && Character.isUpperCase(echiquier[i][l].isOccupe())) {
-					move = IntToString(i, l);
-					toReturn = false;
-				}
-				// Si la case est prise on ne peut pas déplacer
-				else if (echiquier[i][l].isOccupe() != 'v')
-					toReturn = false;
-				else
-					move = IntToString(i, l);
-			}
-			// Déplacement vers la gauche
-			toReturn = true;
-			for (int l =j-1; l >= 0 && toReturn; l--) {
-				if (echiquier[i][l].isOccupe() != 'v' && Character.isUpperCase(echiquier[i][l].isOccupe())) {
-					move = IntToString(i, l);
-					toReturn = false;
-				}
-				// Si la case est prise on ne peut pas déplacer
-				else if (echiquier[i][l].isOccupe() != 'v')
-					toReturn = false;
-				else
-					move = IntToString(i, l);
-			}
-		} else {
-			// Déplacement vers le haut
-			toReturn = true;
-			for (int k = i+1; k < echiquier.length && toReturn; k++) {
-				// Si la case est celle d'arrivée, qu'elle est prise mais que la couleur est
-				// celle de l'adversaire alors on peut déplacer
-				if (echiquier[k][j].isOccupe() != 'v' && Character.isLowerCase(echiquier[k][j].isOccupe())) {
-					move = IntToString(k, j);
-					toReturn = false;
-				}
-				// Si la case est prise on ne peut pas déplacer
-				else if (echiquier[k][j].isOccupe() != 'v')
-					toReturn = false;
-				else
-					move = IntToString(k, j);
-			}
-
-			// Déplacement vers la bas
-			toReturn = true;
-			for (int k = i-1; k >= 0 && toReturn; k--) {
-				// Si la case est celle d'arrivée, qu'elle est prise mais que la couleur est
-				// celle de l'adversaire alors on peut déplacer
-				if (echiquier[k][j].isOccupe() != 'v' && Character.isLowerCase(echiquier[k][j].isOccupe())) {
-					move = IntToString(k, j);
-					toReturn = false;
-				}
-				// Si la case est prise on ne peut pas déplacer
-				else if (echiquier[k][j].isOccupe() != 'v')
-					toReturn = false;
-				else
-					move = IntToString(k, j);
-			}
-			// Déplacement vers la droite
-			toReturn = true;
-			for (int l =j+1; l < echiquier.length && toReturn; l++) {
-				if (echiquier[i][l].isOccupe() != 'v' && Character.isLowerCase(echiquier[i][l].isOccupe())) {
-					move = IntToString(i, l);
-					toReturn = false;
-				}
-				// Si la case est prise on ne peut pas déplacer
-				else if (echiquier[i][l].isOccupe() != 'v')
-					toReturn = false;
-				else
-					move = IntToString(i, l);
-			}
-			// Déplacement vers la gauche
-			toReturn = true;
-			for (int l = j-1; l >= 0 && toReturn; l--) {
-				if (echiquier[i][l].isOccupe() != 'v' && Character.isLowerCase(echiquier[i][l].isOccupe())) {
-					move = IntToString(i, l);
-					toReturn = false;
-				}
-				// Si la case est prise on ne peut pas déplacer
-				else if (echiquier[i][l].isOccupe() != 'v')
-					toReturn = false;
-				else
-					move = IntToString(i, l);
-			}
-		}
-		return move;
-	}
-
-	public static String Queen(Case[][] echiquier, boolean W) {
-		String move = "";
-		char c = ' ';
-		if (W) {
-			c = 'd';
-		} else {
-			c = 'D';
-		}
-		int[] DepartureBox = new int[2];
-		boolean trouver=false;
-		for (int i = 0; i < echiquier.length&&!trouver; i++)
-			for (int j = 0; j < echiquier.length&&!trouver; j++) {
-				if (echiquier[i][j].isOccupe() == c) {
-					DepartureBox[0] = i;
-					DepartureBox[1] = j;
-					trouver=true;
-				}
-
-			}
-		
-		boolean toReturn = true;
-
-		if (W) {
-			int i = DepartureBox[0]+1;
-			int j = DepartureBox[1]+1;
-			// Déplacement diagonale haut droite
-			while (i < echiquier.length && j < echiquier.length && toReturn) {
-				// Si la case est occupée par un noir, on ajoute le mouvement mais on s'arrête
-				// ensuite
-				if (echiquier[i][j].isOccupe() != 'v' && Character.isUpperCase(echiquier[i][j].isOccupe())) {
-					move.concat(IntToString(i, j));
-					toReturn = false;
-				}
-				// Si la case est occupée par un blanc, on s'arrête
-				else if (echiquier[i][j].isOccupe() != 'v') {
-					toReturn = false;
-				}
-				// Si la case est vide, on ajoute le mouvement
-				else {
-					move.concat(IntToString(i, j));
-				}
-				i++;
-				j++;
-			}
-			toReturn = true;
-			i = DepartureBox[0]+1;
-			j = DepartureBox[1]-1;
-			// Déplacement diagonale haut gauche
-			while (i < echiquier.length && j >= 0 && toReturn) {
-				// Si la case est occupée par un noir, on ajoute le mouvement mais on s'arrête
-				// ensuite
-				if (echiquier[i][j].isOccupe() != 'v' && Character.isUpperCase(echiquier[i][j].isOccupe())) {
-					move.concat(IntToString(i, j));
-					toReturn = false;
-				}
-				// Si la case est occupée par un blanc, on s'arrête
-				else if (echiquier[i][j].isOccupe() != 'v') {
-					toReturn = false;
-				}
-				// Si la case est vide, on ajoute le mouvement
-				else {
-					move.concat(IntToString(i, j));
-				}
-				i++;
-				j--;
-			}
-			toReturn = true;
-			 i = DepartureBox[0]-1;
-			 j = DepartureBox[1]-1;
-			// Déplacement diagonale bas gauche
-			while (i >= 0 && j >= 0 && toReturn) {
-				// Si la case est occupée par un noir, on ajoute le mouvement mais on s'arrête
-				// ensuite
-				if (echiquier[i][j].isOccupe() != 'v' && Character.isUpperCase(echiquier[i][j].isOccupe())) {
-					move.concat(IntToString(i, j));
-					toReturn = false;
-				}
-				// Si la case est occupée par un blanc, on s'arrête
-				else if (echiquier[i][j].isOccupe() != 'v') {
-					toReturn = false;
-				}
-				// Si la case est vide, on ajoute le mouvement
-				else {
-					move.concat(IntToString(i, j));
-				}
-				i--;
-				j--;
-			}
-			// Déplacement diagonale bas droite
-			i = DepartureBox[0]-1;
-			j = DepartureBox[1]+1;
-			toReturn = true;
-			while (i >= 0 && j < echiquier.length && toReturn) {
-				// Si la case est occupée par un noir, on ajoute le mouvement mais on s'arrête
-				// ensuite
-				if (echiquier[i][j].isOccupe() != 'v' && Character.isUpperCase(echiquier[i][j].isOccupe())) {
-					move.concat(IntToString(i, j));
-					toReturn = false;
-				}
-				// Si la case est occupée par un blanc, on s'arrête
-				else if (echiquier[i][j].isOccupe() != 'v') {
-					toReturn = false;
-				}
-				// Si la case est vide, on ajoute le mouvement
-				else {
-					move.concat(IntToString(i, j));
-				}
-				i--;
-				j++;
-			}
-		} else {
-			// Déplacement diagonale haut droite
-			toReturn = true;
-			int i = DepartureBox[0]+1;
-			int j = DepartureBox[1]+1;
-			while (i < echiquier.length && j < echiquier.length && toReturn) {
-				// Si la case est occupée par un blanc, on ajoute le mouvement mais on s'arrête
-				// ensuite
-				if (echiquier[i][j].isOccupe() != 'v' && Character.isLowerCase(echiquier[i][j].isOccupe())) {
-					move.concat(IntToString(i, j));
-					toReturn = false;
-				}
-				// Si la case est occupée par un noir, on s'arrête
-				else if (echiquier[i][j].isOccupe() != 'v') {
-					toReturn = false;
-				}
-				// Si la case est vide, on ajoute le mouvement
-				else {
-					move.concat(IntToString(i, j));
-				}
-				i++;
-				j++;
-			}
-			// Déplacement diagonale haut gauche
-			toReturn = true;
-			i = DepartureBox[0]+1;
-			j = DepartureBox[1]+1;
-			while (i < echiquier.length && j >= 0 && toReturn) {
-				// Si la case est occupée par un blanc, on ajoute le mouvement mais on s'arrête
-				// ensuite
-				if (echiquier[i][j].isOccupe() != 'v' && Character.isLowerCase(echiquier[i][j].isOccupe())) {
-					move.concat(IntToString(i, j));
-					toReturn = false;
-				}
-				// Si la case est occupée par un noir, on s'arrête
-				else if (echiquier[i][j].isOccupe() != 'v') {
-					toReturn = false;
-				}
-				// Si la case est vide, on ajoute le mouvement
-				else {
-					move.concat(IntToString(i, j));
-				}
-				i++;
-				j--;
-			}
-
-			// Déplacement diagonale bas gauche
-			toReturn = true;
-			i = DepartureBox[0]-1;
-			j = DepartureBox[1]-1;
-			while (i >= 0 && j >= 0 && toReturn) {
-				// Si la case est occupée par un blanc, on ajoute le mouvement mais on s'arrête
-				// ensuite
-				if (echiquier[i][j].isOccupe() != 'v' && Character.isLowerCase(echiquier[i][j].isOccupe())) {
-					move.concat(IntToString(i, j));
-					toReturn = false;
-				}
-				// Si la case est occupée par un noir, on s'arrête
-				else if (echiquier[i][j].isOccupe() != 'v') {
-					toReturn = false;
-				}
-				// Si la case est vide, on ajoute le mouvement
-				else {
-					move.concat(IntToString(i, j));
-				}
-				i--;
-				j--;
-			}
-			// Déplacement diagonale bas droite
-			toReturn = true;
-			i = DepartureBox[0]-1;
-			j = DepartureBox[1]+1;
-			while (i >= 0 && j < echiquier.length && toReturn) {
-				// Si la case est occupée par un blanc, on ajoute le mouvement mais on s'arrête
-				// ensuite
-				if (echiquier[i][j].isOccupe() != 'v' && Character.isLowerCase(echiquier[i][j].isOccupe())) {
-					move.concat(IntToString(i, j));
-					toReturn = false;
-				}
-				// Si la case est occupée par un noir, on s'arrête
-				else if (echiquier[i][j].isOccupe() != 'v') {
-					toReturn = false;
-				}
-				// Si la case est vide, on ajoute le mouvement
-				else {
-					move.concat(IntToString(i, j));
-				}
-				i--;
-				j++;
-			}
-		}
-		toReturn = true;
-		if (W) {
-			int i = DepartureBox[0];
-			int j = DepartureBox[1];
-			// Déplacement vers le haut
-			for (int k = DepartureBox[0]+1; k < echiquier.length && toReturn; k++) {
-				// Si la case est celle d'arrivée, qu'elle est prise mais que la couleur est
-				// celle de l'adversaire alors on peut déplacer
-				if (echiquier[k][j].isOccupe() != 'v' && Character.isUpperCase(echiquier[k][j].isOccupe())) {
-					move = IntToString(k, j);
-					toReturn = false;
-				}
-				// Si la case est prise on ne peut pas déplacer
-				else if (echiquier[k][j].isOccupe() != 'v')
-					toReturn = false;
-				else
-					move = IntToString(k, j);
-			}
-
-			// Déplacement vers la bas
-			toReturn = true;
-			for (int k = DepartureBox[0]-1; k >= 0 && toReturn; k--) {
-				// Si la case est celle d'arrivée, qu'elle est prise mais que la couleur est
-				// celle de l'adversaire alors on peut déplacer
-				if (echiquier[k][j].isOccupe() != 'v' && Character.isUpperCase(echiquier[k][j].isOccupe())) {
-					move = IntToString(k, j);
-					toReturn = false;
-				}
-				// Si la case est prise on ne peut pas déplacer
-				else if (echiquier[k][j].isOccupe() != 'v')
-					toReturn = false;
-				else
-					move = IntToString(k, j);
-			}
-			// Déplacement vers la droite
-			toReturn = true;
-			for (int l = DepartureBox[1]+1; l < echiquier.length && toReturn; l++) {
-				if (echiquier[i][l].isOccupe() != 'v' && Character.isUpperCase(echiquier[i][l].isOccupe())) {
-					move = IntToString(i, l);
-					toReturn = false;
-				}
-				// Si la case est prise on ne peut pas déplacer
-				else if (echiquier[i][l].isOccupe() != 'v')
-					toReturn = false;
-				else
-					move = IntToString(i, l);
-			}
-			// Déplacement vers la gauche
-			toReturn = true;
-			for (int l = DepartureBox[1]-1; l >= 0 && toReturn; l--) {
-				if (echiquier[i][l].isOccupe() != 'v' && Character.isUpperCase(echiquier[i][l].isOccupe())) {
-					move = IntToString(i, l);
-					toReturn = false;
-				}
-				// Si la case est prise on ne peut pas déplacer
-				else if (echiquier[i][l].isOccupe() != 'v')
-					toReturn = false;
-				else
-					move = IntToString(i, l);
-			}
-		} else {
-			int i = DepartureBox[0];
-			int j = DepartureBox[1];
-			// Déplacement vers le haut
-			toReturn = true;
-			for (int k = DepartureBox[0]+1; k < echiquier.length && toReturn; k++) {
-				// Si la case est celle d'arrivée, qu'elle est prise mais que la couleur est
-				// celle de l'adversaire alors on peut déplacer
-				if (echiquier[k][j].isOccupe() != 'v' && Character.isLowerCase(echiquier[k][j].isOccupe())) {
-					move = IntToString(k, j);
-					toReturn = false;
-				}
-				// Si la case est prise on ne peut pas déplacer
-				else if (echiquier[k][j].isOccupe() != 'v')
-					toReturn = false;
-				else
-					move = IntToString(k, j);
-			}
-
-			// Déplacement vers la bas
-			toReturn = true;
-			for (int k = DepartureBox[0]-1; k >= 0 && toReturn; k--) {
-				// Si la case est celle d'arrivée, qu'elle est prise mais que la couleur est
-				// celle de l'adversaire alors on peut déplacer
-				if (echiquier[k][j].isOccupe() != 'v' && Character.isLowerCase(echiquier[k][j].isOccupe())) {
-					move = IntToString(k, j);
-					toReturn = false;
-				}
-				// Si la case est prise on ne peut pas déplacer
-				else if (echiquier[k][j].isOccupe() != 'v')
-					toReturn = false;
-				else
-					move = IntToString(k, j);
-			}
-			// Déplacement vers la droite
-			toReturn = true;
-			for (int l = DepartureBox[1]+1; l < echiquier.length && toReturn; l++) {
-				if (echiquier[i][l].isOccupe() != 'v' && Character.isLowerCase(echiquier[i][l].isOccupe())) {
-					move = IntToString(i, l);
-					toReturn = false;
-				}
-				// Si la case est prise on ne peut pas déplacer
-				else if (echiquier[i][l].isOccupe() != 'v')
-					toReturn = false;
-				else
-					move = IntToString(i, l);
-			}
-			// Déplacement vers la gauche
-			toReturn = true;
-			for (int l = DepartureBox[1]-1; l >= 0 && toReturn; l--) {
-				if (echiquier[i][l].isOccupe() != 'v' && Character.isLowerCase(echiquier[i][l].isOccupe())) {
-					move = IntToString(i, l);
-					toReturn = false;
-				}
-				// Si la case est prise on ne peut pas déplacer
-				else if (echiquier[i][l].isOccupe() != 'v')
-					toReturn = false;
-				else
-					move = IntToString(i, l);
-			}
-		}
-		return move;
-	}
-
-	public static String Pawn(Case[][] echiquier, boolean W) {
-		String move = "";
-		char c = ' ';
-		if (W) {
-			c = 'p';
-		} else {
-			c = 'P';
-		}
-		int[] DepartureBox = new int[2];
+	/**
+	 * Fonction parcourant tout l'echiquier
+	 * 
+	 * @param echiquier
+	 * @param c
+	 *            Caractere rersentant la piece (r, Q, t ou p etc). Minuscule pour
+	 *            les noirs, majuscule pour les blancs
+	 * @return Une liste contenant toutes les positions i, j des pieces de couleur
+	 *         determinee par c
+	 */
+	private static ArrayList<int[]> calculDepartureBox(Case[][] echiquier, char c) {
+		ArrayList<int[]> DepartureBox = new ArrayList<>();
+		int tab[] = new int[2];
 		for (int i = 0; i < echiquier.length; i++)
 			for (int j = 0; j < echiquier.length; j++) {
 				if (echiquier[i][j].isOccupe() == c) {
-					DepartureBox[0] = i;
-					DepartureBox[1] = j;
-				}
-
-			}
-		int i = DepartureBox[0];
-		int j = DepartureBox[1];
-		boolean toReturn = true;
-		if (W) {
-			// Règle 1er déplacement
-			if (i == 1) {
-				if (echiquier[i + 1][j].isOccupe() != 'v' && Character.isUpperCase(echiquier[i + 1][j].isOccupe())) {
-					move = IntToString(i + 1, j);
-					toReturn = false;
-				}
-				// Si la case est prise on ne peut pas déplacer
-				else if (echiquier[i + 1][j].isOccupe() != 'v')
-					toReturn = false;
-				else
-					move = IntToString(i + 1, j);
-				if (toReturn) {
-					if (echiquier[i + 2][j].isOccupe() != 'v'
-							&& Character.isUpperCase(echiquier[i + 2][j].isOccupe())) {
-						move = IntToString(i + 2, j);
-						toReturn = false;
-					}
-					// Si la case est prise on ne peut pas déplacer
-					else if (echiquier[i + 2][j].isOccupe() != 'v')
-						toReturn = false;
-					else
-						move = IntToString(i + 2, j);
+					tab[0] = i;
+					tab[1] = j;
+					DepartureBox.add(tab);
 				}
 			}
-
-			// Règle avancer de 1 case
-			else {
-
-				if (i + 1 < echiquier.length) {
-					if (echiquier[i + 1][j].isOccupe() != 'v'
-							&& Character.isUpperCase(echiquier[i + 1][j].isOccupe())) {
-						move = IntToString(i + 1, j);
-					}
-					// Si la case est prise on ne peut pas déplacer
-					else if (echiquier[i + 1][j].isOccupe() != 'v') {
-
-					} else
-						move = IntToString(i + 1, j);
-				}
-
-				if (i + 1 < echiquier.length && j + 1 < echiquier.length)
-					if (echiquier[i + 1][j + 1].isOccupe() != 'v'
-							&& Character.isUpperCase(echiquier[i + 1][j + 1].isOccupe())) {
-						move = IntToString(i + 1, j + 1);
-					}
-				if (i + 1 < echiquier.length && j - 1 >= 0)
-					if (echiquier[i + 1][j - 1].isOccupe() != 'v'
-							&& Character.isUpperCase(echiquier[i + 1][j - 1].isOccupe())) {
-						move = IntToString(i + 1, j - 1);
-					}
-			}
-
-		}
-		else 
-		{
-			//Règle 1er déplacement
-			if(i==echiquier.length-2)
-			{
-				if (echiquier[i-1][j].isOccupe() != 'v' && Character.isUpperCase(echiquier[i-1][j].isOccupe())) {
-					move = IntToString(i-1, j);
-					toReturn = false;
-				}
-				// Si la case est prise on ne peut pas déplacer
-				else if (echiquier[i-1][j].isOccupe() != 'v')
-					toReturn = false;
-				else
-					move = IntToString(i-1, j);
-				if(toReturn)
-				{
-					if (echiquier[i-2][j].isOccupe() != 'v' && Character.isUpperCase(echiquier[i-2][j].isOccupe())) {
-						move = IntToString(i-2, j);
-						toReturn = false;
-					}
-					// Si la case est prise on ne peut pas déplacer
-					else if (echiquier[i-2][j].isOccupe() != 'v')
-						toReturn = false;
-					else
-						move = IntToString(i-2, j);
-				}
-			}
-			
-			//Règle avancer de 1 case
-			else
-			{
-				
-				if(i-1>=0)
-				{
-					if (echiquier[i-1][j].isOccupe() != 'v' && Character.isUpperCase(echiquier[i-1][j].isOccupe())) {
-					move = IntToString(i-1, j);
-				}
-				// Si la case est prise on ne peut pas déplacer
-				else if (echiquier[i-1][j].isOccupe() != 'v')
-				{
-					
-				}
-				else
-					move = IntToString(i-1, j);
-				}
-				
-				if(i-1>=0&j-1>=0)
-					if (echiquier[i-1][j-1].isOccupe() != 'v' && Character.isUpperCase(echiquier[i-1][j-1].isOccupe())) {
-						move = IntToString(i-1, j-1);
-					}
-				if(i-1>=0&&j<echiquier.length)
-					if (echiquier[i-1][j+1].isOccupe() != 'v' && Character.isUpperCase(echiquier[i-1][j+1].isOccupe())) {
-						move = IntToString(i-1, j+1);
-					}
-			}
-		}
-
-		return move;
+		return DepartureBox;
 	}
 
 	public static String calculW(Case[][] echiquier) {
-
 		String moves = Bishop(echiquier, true);
-		moves.concat(Rook(echiquier, true));
-		moves.concat(Queen(echiquier,true));
-		moves.concat(Pawn(echiquier,true));
-		return moves;
+		moves += Rook(echiquier, true);
+		moves += Queen(echiquier, true);
+		moves += Pawn(echiquier, true);
+		moves += Knight(echiquier, true);
+		moves += King(echiquier, true);
 
+		return moves;
 	}
 
-	public static String calculB(Case[][] echiquier)
-
-	{
+	public static String calculB(Case[][] echiquier) {
 		String moves = Bishop(echiquier, false);
-		moves.concat(Rook(echiquier, false));
-		moves.concat(Queen(echiquier,false));
-		moves.concat(Pawn(echiquier,false));
-		return moves;
+		moves += Rook(echiquier, false);
+		moves += Queen(echiquier, false);
+		moves += Pawn(echiquier, false);
+		moves += Knight(echiquier, false);
+		moves += King(echiquier, false);
 
+		return moves;
+	}
+
+	/**
+	 * 
+	 * @param white
+	 * @param echiquier
+	 * @param i
+	 * @param j
+	 * @return Bouleen qui indique si la case i j est occupee par un ennemi
+	 */
+	private static Boolean isEnnemy(boolean white, Case[][] echiquier, int i, int j) {
+		if (echiquier[i][j].isOccupe() == 'v')
+			System.out.println("Erreur a is ennemy");
+		return white ? Character.isLowerCase(echiquier[i][j].isOccupe())
+				: Character.isUpperCase(echiquier[i][j].isOccupe());
 	}
 
 }
