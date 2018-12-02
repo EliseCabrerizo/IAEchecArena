@@ -81,7 +81,7 @@ public class Search {
 		for (int i = 0; i < mvtDispo.length()-4; i += 4) {
 			String move = mvtDispo.substring(i, i + 4);
 			Case[][] echiquierTemp = new Case[8][8];
-			echiquierTemp = echiquier; // a voir si ça passe par pointeur (peut être bug)
+			echiquierTemp = echiquier; // a voir si ï¿½a passe par pointeur (peut ï¿½tre bug)
 			// Transforme le mouvement en position de matrice
 			int[] tempDebut = StringToInt(move.substring(0, 2));
 			int[] tempFin = StringToInt(move.substring(2, 4));
@@ -90,7 +90,7 @@ public class Search {
 
 			Bestmove=SuperMinMax_Alpha_Beta_Gamma_Omega(alpha, beta, echiquierTemp, !W, prof+1, move);
 
-			// Renvoie le score du mouvement, il se situe après le mouvement donc après 4
+			// Renvoie le score du mouvement, il se situe aprï¿½s le mouvement donc aprï¿½s 4
 			bestScore = Integer.valueOf(Bestmove.substring(4));
 
 			if (!W) { // fait le changement alpha beta, en fct de quel joueur on calcul

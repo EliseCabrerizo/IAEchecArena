@@ -212,4 +212,8 @@ public class Case {
 
 	}
 
+	public char getOccupe() {
+		return occupe;
+	}
+
 }
