@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Case {
 
-	public static final int PION = 150;
+	public static final int PION = 100;
 
 	public static final int CAVALIER = 350;
 
@@ -12,9 +12,9 @@ public class Case {
 
 	public static final int TOUR = 800;
 
-	public static final int DAME = 2000;
+	public static final int DAME = 1750;
 
-	public static final int ROI = 8000;
+	public static final int ROI = 5000;
 
 	private char occupe;
 

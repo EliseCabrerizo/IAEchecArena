@@ -83,12 +83,12 @@ public class Search {
 			Case[][] echiquierTemp = new Case[8][8];
 			echiquierTemp = echiquier; // a voir si ça passe par pointeur (peut être bug)
 			// Transforme le mouvement en position de matrice
-			int[] tempDebut = StringToInt(move.substring(0, 1));
-			int[] tempFin = StringToInt(move.substring(2, 3));
+			int[] tempDebut = StringToInt(move.substring(0, 2));
+			int[] tempFin = StringToInt(move.substring(2, 4));
 			echiquierTemp[tempFin[1]][tempFin[0]].setOccupe(echiquier[tempDebut[1]][tempDebut[0]].isOccupe());
 			echiquierTemp[tempDebut[1]][tempDebut[0]].setOccupe('v');
 
-			SuperMinMax_Alpha_Beta_Gamma_Omega(alpha, beta, echiquierTemp, !W, prof, move);
+			Bestmove=SuperMinMax_Alpha_Beta_Gamma_Omega(alpha, beta, echiquierTemp, !W, prof, move);
 
 			// Renvoie le score du mouvement, il se situe après le mouvement donc après 4
 			bestScore = Integer.valueOf(Bestmove.substring(4));

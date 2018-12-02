@@ -1271,7 +1271,17 @@ public class Move {
 
 		// 1 a droite
 		j = tab[1] + 1;
-		isEmpty_Moves[0] = echiquier[i][j].isOccupe() == 'v'; // La case est vide, utile pour les boucles while
+		if(j<8) // evite de bugger si le pion est tout à droite
+		{
+			isEmpty_Moves[0] = echiquier[i][j].isOccupe() == 'v'; // La case est vide, utile pour les boucles while
+		}
+		else
+		{
+			j--;
+			isEmpty_Moves[0] = echiquier[i][j].isOccupe() == 'v';
+			
+		}
+		
 		// La case n'est pas vide (ennemi ou allie)
 		if (!(Boolean) isEmpty_Moves[0]) {
 			// Si la case est occupee par un ennemi, on ajoute le deplacement sur l'ennemei
@@ -1328,7 +1338,11 @@ public class Move {
 	 */
 	public static Object[] caseEstDiponible(Case[][] echiquier, int i, int j, boolean white) {
 		Object[] toReturn = { null, "" };
-
+		i = (i>=8) ? 7 : i;
+		j = (j>=8) ? 7 : j;
+		
+		i = (i<0) ? 0 : i;
+		j = (j<0) ? 0 : j;
 		toReturn[0] = echiquier[i][j].isOccupe() == 'v'; // La case est vide, utile pour les boucles while
 
 		// La case n'est pas vide (a cause d'un ennemi ou d'un allie)
@@ -1366,7 +1380,7 @@ public class Move {
 	 *         : "00" => "a1" ou "77" => "h8"
 	 */
 	public static String IntToString(int i, int j) {
-		if (!(0 <= i && i <= 7) || (0 <= j && j <= 7)) {
+		if (!((0 <= i && i <= 7) || (0 <= j && j <= 7))) {
 			System.err.println("Depassement : i = " + i + ", j = " + j + "!!");
 		}
 		String aRetourner = "";

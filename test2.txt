@@ -1,0 +1,3 @@
+input : ucinewgame
+input : position startpos moves d2d4
+input : go movetime 1000
