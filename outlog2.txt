@@ -1,1 +1,1 @@
-bestmove h7h8
+bestmove f8f8

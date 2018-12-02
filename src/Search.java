@@ -78,7 +78,7 @@ public class Search {
 		} else {
 			mvtDispo = Move.calculB(echiquier);
 		}
-		for (int i = 0; i < mvtDispo.length(); i += 4) {
+		for (int i = 0; i < mvtDispo.length()-4; i += 4) {
 			String move = mvtDispo.substring(i, i + 4);
 			Case[][] echiquierTemp = new Case[8][8];
 			echiquierTemp = echiquier; // a voir si ça passe par pointeur (peut être bug)

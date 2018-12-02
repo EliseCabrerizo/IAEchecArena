@@ -1292,6 +1292,16 @@ public class Move {
 
 		// 1 a gauche
 		j = tab[1] - 1;
+		if(j>=0) // evite de bugger si le pion est tout à gauche
+		{
+			isEmpty_Moves[0] = echiquier[i][j].isOccupe() == 'v'; // La case est vide, utile pour les boucles while
+		}
+		else
+		{
+			j++;
+			isEmpty_Moves[0] = echiquier[i][j].isOccupe() == 'v';
+			
+		}
 		isEmpty_Moves[0] = echiquier[i][j].isOccupe() == 'v'; // La case est vide, utile pour les boucles while
 		// La case n'est pas vide (ennemi ou allie)
 		if (!(Boolean) isEmpty_Moves[0]) {
@@ -1384,8 +1394,9 @@ public class Move {
 			System.err.println("Depassement : i = " + i + ", j = " + j + "!!");
 		}
 		String aRetourner = "";
-		aRetourner = Character.toString((char) (i + 'a'));
-		aRetourner += (j + 1);
+		aRetourner = Character.toString((char) (j + 'a'));
+		aRetourner += (i + 1);
+		
 		return aRetourner;
 	}
 
@@ -1446,7 +1457,7 @@ public class Move {
 	private static Boolean isEnnemy(boolean white, Case[][] echiquier, int i, int j) {
 		if (echiquier[i][j].isOccupe() == 'v')
 			System.out.println("Erreur a is ennemy");
-		return white ? Character.isLowerCase(echiquier[i][j].isOccupe())
+		return !white ? Character.isLowerCase(echiquier[i][j].isOccupe())
 				: Character.isUpperCase(echiquier[i][j].isOccupe());
 	}
 
