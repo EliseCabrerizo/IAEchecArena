@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+
+import com.sun.xml.internal.ws.dump.LoggingDumpTube.Position;
+
 public class Search {
 
 	public static int Max_depth = 1;
@@ -7,10 +11,9 @@ public class Search {
 	public static int Black = 0;
 
 	// methode pour trouver le meilleur coup
-	public static String get_bestmove(long WK,
-			long WQ, long WR, long WB, long WN, long WP, long BK, long BQ,
-			long BR, long BB, long BN, long BP, boolean WhiteMove) {
-		
+	public static String get_bestmove(long WK, long WQ, long WR, long WB, long WN, long WP, long BK, long BQ, long BR,
+			long BB, long BN, long BP, boolean WhiteMove) {
+
 		int depth = 0; // profondeur
 
 		Case[][] echiquier = new Case[8][8];
@@ -19,45 +22,45 @@ public class Search {
 			echiquier[i / 8][i % 8] = new Case();
 		}
 		for (int i = 0; i < 64; i++) {
-		if (((WP >> i) & 1) == 1) {
-			echiquier[i / 8][i % 8].setOccupe('P');
+			if (((WP >> i) & 1) == 1) {
+				echiquier[i / 8][i % 8].setOccupe('P');
 			}
-		if (((WN >> i) & 1) == 1) {
-			echiquier[i / 8][i % 8].setOccupe('C');
+			if (((WN >> i) & 1) == 1) {
+				echiquier[i / 8][i % 8].setOccupe('C');
 			}
-		if (((WB >> i) & 1) == 1) {
-			echiquier[i / 8][i % 8].setOccupe('F');
+			if (((WB >> i) & 1) == 1) {
+				echiquier[i / 8][i % 8].setOccupe('F');
 			}
-		if (((WR >> i) & 1) == 1) {
-			echiquier[i / 8][i % 8].setOccupe('T');
+			if (((WR >> i) & 1) == 1) {
+				echiquier[i / 8][i % 8].setOccupe('T');
 			}
-		if (((WQ >> i) & 1) == 1) {
-			echiquier[i / 8][i % 8].setOccupe('D');
+			if (((WQ >> i) & 1) == 1) {
+				echiquier[i / 8][i % 8].setOccupe('D');
 			}
-		if (((WK >> i) & 1) == 1) {
-			echiquier[i / 8][i % 8].setOccupe('R');
+			if (((WK >> i) & 1) == 1) {
+				echiquier[i / 8][i % 8].setOccupe('R');
 			}
-		if (((BP >> i) & 1) == 1) {
-			echiquier[i / 8][i % 8].setOccupe('p');
+			if (((BP >> i) & 1) == 1) {
+				echiquier[i / 8][i % 8].setOccupe('p');
 			}
-		if (((BN >> i) & 1) == 1) {
-			echiquier[i / 8][i % 8].setOccupe('c');
+			if (((BN >> i) & 1) == 1) {
+				echiquier[i / 8][i % 8].setOccupe('c');
 			}
-		if (((BB >> i) & 1) == 1) {
-			echiquier[i / 8][i % 8].setOccupe('f');
+			if (((BB >> i) & 1) == 1) {
+				echiquier[i / 8][i % 8].setOccupe('f');
 			}
-		if (((BR >> i) & 1) == 1) {
-			echiquier[i / 8][i % 8].setOccupe('t');
+			if (((BR >> i) & 1) == 1) {
+				echiquier[i / 8][i % 8].setOccupe('t');
 			}
-		if (((BQ >> i) & 1) == 1) {
-			echiquier[i / 8][i % 8].setOccupe('d');
+			if (((BQ >> i) & 1) == 1) {
+				echiquier[i / 8][i % 8].setOccupe('d');
 			}
-		if (((BK >> i) & 1) == 1) {
-			echiquier[i / 8][i % 8].setOccupe('r');
+			if (((BK >> i) & 1) == 1) {
+				echiquier[i / 8][i % 8].setOccupe('r');
 			}
 		}
-		
-		String bestmove = SuperMinMax_Alpha_Beta_Gamma_Omega(-100000, 100000,echiquier, WhiteMove, depth, ""); // min_maxAlphaBeta
+
+		String bestmove = SuperMinMax_Alpha_Beta_Gamma_Omega(-100000, 100000, echiquier, WhiteMove, depth, ""); // min_maxAlphaBeta
 		return bestmove;
 	}
 
@@ -78,40 +81,68 @@ public class Search {
 		} else {
 			mvtDispo = Move.calculB(echiquier);
 		}
-		for (int i = 0; i < mvtDispo.length()-4; i += 4) {
+		System.out.println("\n\n\n");
+		System.out.println("********************************************");
+		System.out.println("****Verification de tous les mouvements*****");
+		System.out.println("****Profondeur : " + prof + "  ************************");
+		System.out.println("********************************************");
+		for (int i = 0; i <= mvtDispo.length() - 4; i += 4) {
 			String move = mvtDispo.substring(i, i + 4);
 			Case[][] echiquierTemp = new Case[8][8];
-			echiquierTemp = echiquier; // a voir si ï¿½a passe par pointeur (peut ï¿½tre bug)
+
+			// echiquierTemp = echiquier; // a voir si ça passe par pointeur (peut être bug)
+			// // !!!! alors oui là ca va bugger !!!!
+
+			// Copie de l'echiqiuer dans un echiqiuer temporaire
+			for (int m = 0; m < echiquierTemp.length; m++) {
+				for (int n = 0; n < echiquierTemp.length; n++) {
+					echiquierTemp[m][n] = echiquier[m][n];
+				}
+			}
+
 			// Transforme le mouvement en position de matrice
 			int[] tempDebut = StringToInt(move.substring(0, 2));
 			int[] tempFin = StringToInt(move.substring(2, 4));
-			echiquierTemp[tempFin[1]][tempFin[0]].setOccupe(echiquier[tempDebut[1]][tempDebut[0]].isOccupe());
-			echiquierTemp[tempDebut[1]][tempDebut[0]].setOccupe('v');
 
-			Bestmove=SuperMinMax_Alpha_Beta_Gamma_Omega(alpha, beta, echiquierTemp, !W, prof+1, move);
+			System.out.println("\n\n\n");
+			System.out
+					.println("Départ : " + move.substring(0, 2) + echiquierTemp[tempDebut[0]][tempDebut[1]].isOccupe());
+			System.out.println("Arrivée : " + move.substring(2, 4) + echiquierTemp[tempFin[0]][tempFin[1]].isOccupe());
+			char cara = echiquierTemp[tempFin[0]][tempFin[1]].isOccupe();
+			echiquierTemp[tempFin[0]][tempFin[1]].setOccupe(echiquierTemp[tempDebut[0]][tempDebut[1]].isOccupe());
+			echiquierTemp[tempDebut[0]][tempDebut[1]].setOccupe('v');
 
-			// Renvoie le score du mouvement, il se situe aprï¿½s le mouvement donc aprï¿½s 4
-			bestScore = Integer.valueOf(Bestmove.substring(4));
+			boolean pasbon = estEnEchec(echiquierTemp, W);
 
-			if (!W) { // fait le changement alpha beta, en fct de quel joueur on calcul
-				if (bestScore < beta) {
-					beta = bestScore;
-					betamove = move;
-				}
-			} else {
-				if (bestScore > alpha) {
-					alpha = bestScore;
-					alphamove = move;
-				}
-			}
+			System.out.println("Mouvements verifie : " + move + " " + pasbon);
+			if (!pasbon) {
+				Bestmove = SuperMinMax_Alpha_Beta_Gamma_Omega(alpha, beta, echiquierTemp, !W, prof + 1, move);
 
-			if (alpha >= beta) {
-				if (!W) {
-					return betamove + beta;
+				// Renvoie le score du mouvement, il se situe après le mouvement donc après 4
+				bestScore = Integer.valueOf(Bestmove.substring(4));
+
+				if (!W) { // fait le changement alpha beta, en fct de quel joueur on calcul
+					if (bestScore < beta) {
+						beta = bestScore;
+						betamove = move;
+					}
 				} else {
-					return alphamove + alpha;
+					if (bestScore > alpha) {
+						alpha = bestScore;
+						alphamove = move;
+					}
+				}
+
+				if (alpha >= beta) {
+					if (!W) {
+						return betamove + beta;
+					} else {
+						return alphamove + alpha;
+					}
 				}
 			}
+			echiquierTemp[tempDebut[0]][tempDebut[1]].setOccupe(echiquierTemp[tempFin[0]][tempFin[1]].isOccupe());
+			echiquierTemp[tempFin[0]][tempFin[1]].setOccupe(cara);
 		}
 		if (!W) {
 			return betamove + beta;
@@ -123,14 +154,14 @@ public class Search {
 	public static int[] StringToInt(String mvt) {
 		int[] aRetourner = new int[2];
 		char number = mvt.charAt(0);
-		aRetourner[0] = Character.getNumericValue(number) - 10;
-		aRetourner[1] = Integer.parseInt(mvt.substring(1)) - 1;
+		aRetourner[0] = 8 - Integer.parseInt(mvt.substring(1));
+		aRetourner[1] = Character.getNumericValue(number) - 10;
+		// System.out.println(mvt+" => "+aRetourner[0]+""+aRetourner[1]);
 		return aRetourner;
 	}
 
-	public static int ischeck(long WK,
-			long WQ, long WR, long WB, long WN, long WP, long BK, long BQ,
-			long BR, long BB, long BN, long BP, int player) {
+	public static int ischeck(long WK, long WQ, long WR, long WB, long WN, long WP, long BK, long BQ, long BR, long BB,
+			long BN, long BP, int player) {
 		int bestscore = 0;
 		// if(player == White){
 		long Blackatt_map = Move.attackbitmapB(WK, WQ, WR, WB, WN, WP, BK, BQ, BR, BB, BN, BP);
@@ -146,4 +177,39 @@ public class Search {
 		return bestscore;
 	}
 
+	/**
+	 * 
+	 * @param echiquierTemp
+	 *            Echiqiuer modifie par le mouvement qu'on desire verifier sa
+	 *            faisabilite
+	 * @param white
+	 *            Couleur du roi
+	 * @return Vrai si le roi de la couleur white est en echec, Faux si le roi n'est
+	 *         pas en echec
+	 */
+	private static boolean estEnEchec(Case[][] echiquierTemp, boolean white) {
+		boolean resultat = false;
+		char c = white ? 'R' : 'r';
+		// Recherche de la position du roi
+		ArrayList<int[]> DepartureBox = Move.calculDepartureBox(echiquierTemp, c);
+		if (DepartureBox.size() != 1) {
+			System.err.println(white);
+			Move.afficherEchiquier(echiquierTemp);
+			System.err.println("Il n'y a plus de roi ou il y a plusieurs rois");
+		} else {
+			// Conversion de la position du roi en String
+			String positionRoi = Move.IntToString(DepartureBox.get(0)[0], DepartureBox.get(0)[1]);
+			// Calcul des movements possibles de l'adversaire
+			System.out.println("");
+			String movesEnnemy = white ? Move.calculB(echiquierTemp) : Move.calculW(echiquierTemp);
+			System.out.println("\n");
+			int i = 0;
+			while (i <= movesEnnemy.length() - 4 && !resultat) {
+//				System.out.println(positionRoi + " " + movesEnnemy.substring(i + 2, i + 4));
+				resultat = positionRoi.equals(movesEnnemy.substring(i + 2, i + 4));
+				i += 4;
+			}
+		}
+		return resultat;
+	}
 }

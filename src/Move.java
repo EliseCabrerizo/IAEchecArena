@@ -1071,36 +1071,36 @@ public class Move {
 		char c = white ? 'R' : 'r';
 
 		ArrayList<int[]> DepartureBox = calculDepartureBox(echiquier, c);
-		Object[] temp = null;
 
 		if (!DepartureBox.isEmpty()) {
 			for (int[] tab : DepartureBox) {
 
-				// Deplacement de 1 a droite et 1 en-haut
+				// Deplacement de 1 a droite et 1 en-bas
 				move += caseEstDiponible(echiquier, tab[0] + 1, tab[1] + 1, white, tab)[1];
 
 				// Deplacement de 1 a droite
 				move += caseEstDiponible(echiquier, tab[0], tab[1] + 1, white, tab)[1];
 
-				// Deplacement de 1 a droite et 1 en-bas
+				// Deplacement de 1 a droite et 1 en-haut
 				move += caseEstDiponible(echiquier, tab[0] - 1, tab[1] + 1, white, tab)[1];
 
-				// Deplacement de 1 en-bas
+				// Deplacement de 1 en-haut
 				move += caseEstDiponible(echiquier, tab[0] - 1, tab[1], white, tab)[1];
 
-				// Deplacement de 1 en-bas et 1 a gauche
+				// Deplacement de 1 a gauche et 1 en-haut
 				move += caseEstDiponible(echiquier, tab[0] - 1, tab[1] - 1, white, tab)[1];
 
 				// Deplacement de 1 a gauche
 				move += caseEstDiponible(echiquier, tab[0], tab[1] - 1, white, tab)[1];
 
-				// Deplacement de 1 a gauche et 1 en-haut
+				// Deplacement de 1 en-bas et 1 a gauche
 				move += caseEstDiponible(echiquier, tab[0] + 1, tab[1] - 1, white, tab)[1];
 
-				// Deplacement de 1 en-haut
+				// Deplacement de 1 en-bas
 				move += caseEstDiponible(echiquier, tab[0] + 1, tab[1], white, tab)[1];
 			}
 		}
+
 		System.out.print("Roi " + (white ? "white" : "black") + " ");
 		afficherMove(move);
 		return move;
@@ -1111,7 +1111,6 @@ public class Move {
 		char c = white ? 'C' : 'c';
 
 		ArrayList<int[]> DepartureBox = calculDepartureBox(echiquier, c);
-		Object[] temp = null;
 
 		if (!DepartureBox.isEmpty()) {
 			for (int[] tab : DepartureBox) {
@@ -1419,6 +1418,21 @@ public class Move {
 				toReturn[1] = IntToString(tab[0], tab[1]) + IntToString(i, j);
 			}
 		}
+		// if (toReturn[1].equals("")) {
+		// char c = white ? 'R' : 'r';
+		// ArrayList<int[]> DepartureBox = calculDepartureBox(echiquier, c);
+		// if(DepartureBox.isEmpty()) {
+		// System.err.println("Il n'y a plus de roi");
+		// }else {
+		// String moveEnnemy = "";
+		// moveEnnemy += Rook(echiquier, !white);
+		// moveEnnemy += Queen(echiquier, !white);
+		// moveEnnemy += Pawn(echiquier, !white);
+		// moveEnnemy += Knight(echiquier, !white);
+		// moveEnnemy += King(echiquier, !white);
+		//
+		// }
+		// }
 		return toReturn;
 
 		// Si la case est celle d'arrivee, qu'elle est prise mais que la couleur est
@@ -1465,7 +1479,7 @@ public class Move {
 	 * @return Une liste contenant toutes les positions i, j des pieces de couleur
 	 *         determinee par c
 	 */
-	private static ArrayList<int[]> calculDepartureBox(Case[][] echiquier, char c) {
+	public static ArrayList<int[]> calculDepartureBox(Case[][] echiquier, char c) {
 		ArrayList<int[]> DepartureBox = new ArrayList<>();
 		for (int i = 0; i < echiquier.length; i++) {
 			for (int j = 0; j < echiquier.length; j++) {
@@ -1491,7 +1505,8 @@ public class Move {
 		moves += Pawn(echiquier, true);
 		moves += Knight(echiquier, true);
 		moves += King(echiquier, true);
-		// afficherMove(moves);
+		System.out.print("Recapitulatif des mouvements");
+		afficherMove(moves);
 		System.out.println("Calcul White Fin");
 
 		return moves;
@@ -1506,7 +1521,8 @@ public class Move {
 		moves += Pawn(echiquier, false);
 		moves += Knight(echiquier, false);
 		moves += King(echiquier, false);
-		// afficherMove(moves);
+		System.out.print("Recapitulatif des mouvements");
+		afficherMove(moves);
 		System.out.println("Calcul Black Fin");
 
 		return moves;
@@ -1527,7 +1543,7 @@ public class Move {
 				: Character.isUpperCase(echiquier[i][j].isOccupe());
 	}
 
-	private static void afficherEchiquier(Case[][] echiquier) {
+	public static void afficherEchiquier(Case[][] echiquier) {
 		for (int i = 0; i < echiquier.length; i++) {
 			System.out.print("|");
 			for (int j = 0; j < echiquier.length; j++) {
@@ -1541,8 +1557,8 @@ public class Move {
 		}
 	}
 
-	private static void afficherMove(String moves) {
-		System.out.println("moves = ");
+	public static void afficherMove(String moves) {
+		System.out.println(" : Mouvements = ");
 		for (int i = 0; i <= moves.length() - 4; i += 4) {
 			System.out.print(moves.substring(i, i + 4) + ", ");
 		}
