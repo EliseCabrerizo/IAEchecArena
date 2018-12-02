@@ -205,7 +205,7 @@ public class Search {
 			System.out.println("\n");
 			int i = 0;
 			while (i <= movesEnnemy.length() - 4 && !resultat) {
-//				System.out.println(positionRoi + " " + movesEnnemy.substring(i + 2, i + 4));
+				// System.out.println(positionRoi + " " + movesEnnemy.substring(i + 2, i + 4));
 				resultat = positionRoi.equals(movesEnnemy.substring(i + 2, i + 4));
 				i += 4;
 			}
