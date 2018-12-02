@@ -106,7 +106,7 @@ public class GuiInterface {
 			System.out.println(elapsedTime);
 			// ecris le meilleur mouvement au format UCI
 			// send="benstmove b8c6";
-			send = "bestmove " + moveOutputToUCI(bestmove);
+			send = "bestmove " + bestmove.substring(0,4);
 			System.out.println(send);
 			fos.write(send.getBytes("UTF-8"));
 			fos.write("\n".getBytes("UTF-8"));

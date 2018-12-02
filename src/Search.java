@@ -88,7 +88,7 @@ public class Search {
 			echiquierTemp[tempFin[1]][tempFin[0]].setOccupe(echiquier[tempDebut[1]][tempDebut[0]].isOccupe());
 			echiquierTemp[tempDebut[1]][tempDebut[0]].setOccupe('v');
 
-			Bestmove=SuperMinMax_Alpha_Beta_Gamma_Omega(alpha, beta, echiquierTemp, !W, prof, move);
+			Bestmove=SuperMinMax_Alpha_Beta_Gamma_Omega(alpha, beta, echiquierTemp, !W, prof+1, move);
 
 			// Renvoie le score du mouvement, il se situe après le mouvement donc après 4
 			bestScore = Integer.valueOf(Bestmove.substring(4));
