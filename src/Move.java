@@ -1307,19 +1307,10 @@ public class Move {
 		// Les noirs descendent
 		int monter = white ? -1 : 1;
 
-		// Deplamcement diagonale
+		// Deplamcement diagonale (1 verticale + 1 a droite ou a gauche)
 		// verticale de 1
 		i = tab[0] + monter;
 
-		// if (j < 8) // evite de bugger si le pion est tout e droite
-		// {
-		// isEmpty_Moves[0] = echiquier[i][j].isOccupe() == 'v'; // La case est vide,
-		// utile pour les boucles while
-		// } else {
-		// j--;
-		// isEmpty_Moves[0] = echiquier[i][j].isOccupe() == 'v';
-		//
-		// }
 		// 1 a droite
 		j = tab[1] + 1;
 		if ((0 <= i && i <= 7) && (0 <= j && j <= 7)) {
@@ -1364,8 +1355,8 @@ public class Move {
 
 			isEmpty_Moves[0] = true;
 
-			// Les pions blancs commencent en 1
-			// Les pions noirs commencent en 6
+			// Les pions blancs commencent en i = 6
+			// Les pions noirs commencent en i = 1
 			int positionDepartPion = white ? 6 : 1;
 			int deplacementMax = (tab[0] == positionDepartPion) ? 2 : 1;
 
@@ -1380,6 +1371,15 @@ public class Move {
 			}
 		}
 		return move;
+		// if (j < 8) // evite de bugger si le pion est tout e droite
+		// {
+		// isEmpty_Moves[0] = echiquier[i][j].isOccupe() == 'v'; // La case est vide,
+		// utile pour les boucles while
+		// } else {
+		// j--;
+		// isEmpty_Moves[0] = echiquier[i][j].isOccupe() == 'v';
+		//
+		// }
 	}
 
 	/**
@@ -1454,7 +1454,7 @@ public class Move {
 	 * @param j
 	 *            numero de la colonne
 	 * @return Un String contenant i change en lettre et j incremante de 1. Exemple
-	 *         : "00" => "a1" ou "77" => "h8"
+	 *         : "00" => "a8" ou "77" => "h1"
 	 */
 	public static String IntToString(int i, int j) {
 		if (!((0 <= i && i <= 7) && (0 <= j && j <= 7))) {
@@ -1463,9 +1463,7 @@ public class Move {
 		String aRetourner = "";
 		aRetourner = Character.toString((char) ('a' + j));
 		aRetourner += (8 - i);
-		// System.out.print(i);
-		// System.out.print(j);
-		// System.out.print(" => "+aRetourner+" ");
+		// System.out.print(i+""+j+" => "+aRetourner+" ");
 		return aRetourner;
 	}
 

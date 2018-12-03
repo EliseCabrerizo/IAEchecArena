@@ -90,9 +90,6 @@ public class Search {
 			String move = mvtDispo.substring(i, i + 4);
 			Case[][] echiquierTemp = new Case[8][8];
 
-			// echiquierTemp = echiquier; // a voir si ça passe par pointeur (peut être bug)
-			// // !!!! alors oui là ca va bugger !!!!
-
 			// Copie de l'echiqiuer dans un echiqiuer temporaire
 			for (int m = 0; m < echiquierTemp.length; m++) {
 				for (int n = 0; n < echiquierTemp.length; n++) {
@@ -100,22 +97,27 @@ public class Search {
 				}
 			}
 
-			// Transforme le mouvement en position de matrice
+			// Transforme le mouvement en position de matrice de la forme i j
 			int[] tempDebut = StringToInt(move.substring(0, 2));
 			int[] tempFin = StringToInt(move.substring(2, 4));
 
 			System.out.println("\n\n\n");
-			System.out
-					.println("Départ : " + move.substring(0, 2) + echiquierTemp[tempDebut[0]][tempDebut[1]].isOccupe());
-			System.out.println("Arrivée : " + move.substring(2, 4) + echiquierTemp[tempFin[0]][tempFin[1]].isOccupe());
-			char cara = echiquierTemp[tempFin[0]][tempFin[1]].isOccupe();
+			System.out.println(
+					"Deplacement : " + move.substring(0, 2) + " " + echiquierTemp[tempDebut[0]][tempDebut[1]].isOccupe()
+							+ " => " + move.substring(2, 4) + " " + echiquierTemp[tempFin[0]][tempFin[1]].isOccupe());
+
+			// Sauvegarde de la piece mangee
+			char pieceRemplacee = echiquierTemp[tempFin[0]][tempFin[1]].isOccupe();
+
+			// Execution du mouvement
 			echiquierTemp[tempFin[0]][tempFin[1]].setOccupe(echiquierTemp[tempDebut[0]][tempDebut[1]].isOccupe());
 			echiquierTemp[tempDebut[0]][tempDebut[1]].setOccupe('v');
 
-			boolean pasbon = estEnEchec(echiquierTemp, W);
+			boolean EstEnEchec = estEnEchec(echiquierTemp, W);
 
-			System.out.println("Mouvements verifie : " + move + " " + pasbon);
-			if (!pasbon) {
+			System.out.println("Mouvements verifie : " + move + " Est-il en echec ? " + EstEnEchec);
+
+			if (!EstEnEchec) {// Le roi n'est pas en echec dans le cas de ce mouvement
 				Bestmove = SuperMinMax_Alpha_Beta_Gamma_Omega(alpha, beta, echiquierTemp, !W, prof + 1, move);
 
 				// Renvoie le score du mouvement, il se situe après le mouvement donc après 4
@@ -141,8 +143,12 @@ public class Search {
 					}
 				}
 			}
+
+			// On revient en arriere
+			// La piece deplacee revient a sa place initiale.
 			echiquierTemp[tempDebut[0]][tempDebut[1]].setOccupe(echiquierTemp[tempFin[0]][tempFin[1]].isOccupe());
-			echiquierTemp[tempFin[0]][tempFin[1]].setOccupe(cara);
+			// La piece mangee revient sur le jeu
+			echiquierTemp[tempFin[0]][tempFin[1]].setOccupe(pieceRemplacee);
 		}
 		if (!W) {
 			return betamove + beta;
@@ -151,6 +157,13 @@ public class Search {
 		}
 	}
 
+	/**
+	 * 
+	 * @param mvt
+	 *            lettre de la colonne + numero de la ligne
+	 * @return Un tableau de deux entiers representant le numero de la ligne et de
+	 *         la colonne d'une matrice. Exemple : "a8" => "00" ou "h1" => "77"
+	 */
 	public static int[] StringToInt(String mvt) {
 		int[] aRetourner = new int[2];
 		char number = mvt.charAt(0);
@@ -189,20 +202,27 @@ public class Search {
 	 */
 	private static boolean estEnEchec(Case[][] echiquierTemp, boolean white) {
 		boolean resultat = false;
+
+		// Recherche de la position du roi de la couleur white
 		char c = white ? 'R' : 'r';
-		// Recherche de la position du roi
 		ArrayList<int[]> DepartureBox = Move.calculDepartureBox(echiquierTemp, c);
+
 		if (DepartureBox.size() != 1) {
 			System.err.println(white);
-			Move.afficherEchiquier(echiquierTemp);
+			// Move.afficherEchiquier(echiquierTemp);
 			System.err.println("Il n'y a plus de roi ou il y a plusieurs rois");
 		} else {
 			// Conversion de la position du roi en String
 			String positionRoi = Move.IntToString(DepartureBox.get(0)[0], DepartureBox.get(0)[1]);
+
 			// Calcul des movements possibles de l'adversaire
+
 			System.out.println("");
+			// Recuperation des mouvements de l'ennemi
 			String movesEnnemy = white ? Move.calculB(echiquierTemp) : Move.calculW(echiquierTemp);
 			System.out.println("\n");
+
+			// le booleen resultat passe a vrai des qu'un ennemi peut capturer le roi
 			int i = 0;
 			while (i <= movesEnnemy.length() - 4 && !resultat) {
 				// System.out.println(positionRoi + " " + movesEnnemy.substring(i + 2, i + 4));
