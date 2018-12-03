@@ -1014,8 +1014,8 @@ public class Move {
 				move += deplacementDiagonale(tab, white, echiquier);
 			}
 		}
-		System.out.print("Fou " + (white ? "white" : "black") + " ");
-		afficherMove(move);
+		// System.out.print("Fou " + (white ? "white" : "black") + " ");
+		// afficherMove(move);
 		return move;
 	}
 
@@ -1030,8 +1030,8 @@ public class Move {
 				move += deplacementCroix(tab, white, echiquier);
 			}
 		}
-		System.out.print("Tour " + (white ? "white" : "black") + " ");
-		afficherMove(move);
+		// System.out.print("Tour " + (white ? "white" : "black") + " ");
+		// afficherMove(move);
 		return move;
 	}
 
@@ -1046,8 +1046,8 @@ public class Move {
 				move += deplacementCroix(tab, white, echiquier);
 			}
 		}
-		System.out.print("Dame " + (white ? "white" : "black") + " ");
-		afficherMove(move);
+		// System.out.print("Dame " + (white ? "white" : "black") + " ");
+		// afficherMove(move);
 		return move;
 	}
 
@@ -1061,8 +1061,8 @@ public class Move {
 				move += deplacementPion(tab, white, echiquier);
 			}
 		}
-		System.out.print("Pion " + (white ? "white" : "black") + " ");
-		afficherMove(move);
+		// System.out.print("Pion " + (white ? "white" : "black") + " ");
+		// afficherMove(move);
 		return move;
 	}
 
@@ -1101,8 +1101,8 @@ public class Move {
 			}
 		}
 
-		System.out.print("Roi " + (white ? "white" : "black") + " ");
-		afficherMove(move);
+		// System.out.print("Roi " + (white ? "white" : "black") + " ");
+		// afficherMove(move);
 		return move;
 	}
 
@@ -1140,8 +1140,8 @@ public class Move {
 
 			}
 		}
-		System.out.print("Cavalier " + (white ? "white" : "black") + " ");
-		afficherMove(move);
+		// System.out.print("Cavalier " + (white ? "white" : "black") + " ");
+		// afficherMove(move);
 		return move;
 	}
 
@@ -1457,9 +1457,9 @@ public class Move {
 	 *         : "00" => "a8" ou "77" => "h1"
 	 */
 	public static String IntToString(int i, int j) {
-		if (!((0 <= i && i <= 7) && (0 <= j && j <= 7))) {
-			System.err.println("Depassement : i = " + i + ", j = " + j + "!!");
-		}
+		// if (!((0 <= i && i <= 7) && (0 <= j && j <= 7))) {
+		// System.err.println("Depassement : i = " + i + ", j = " + j + "!!");
+		// }
 		String aRetourner = "";
 		aRetourner = Character.toString((char) ('a' + j));
 		aRetourner += (8 - i);
@@ -1494,8 +1494,8 @@ public class Move {
 	}
 
 	public static String calculW(Case[][] echiquier) {
-		System.out.println("Calcul White Debut");
-		afficherEchiquier(echiquier);
+//		 System.out.println("Calcul White Debut");
+//		 afficherEchiquier(echiquier);
 
 		String moves = Bishop(echiquier, true);
 		moves += Rook(echiquier, true);
@@ -1503,25 +1503,25 @@ public class Move {
 		moves += Pawn(echiquier, true);
 		moves += Knight(echiquier, true);
 		moves += King(echiquier, true);
-		System.out.print("Recapitulatif des mouvements");
-		afficherMove(moves);
-		System.out.println("Calcul White Fin");
+//		 System.out.print("Recapitulatif des mouvements");
+//		 afficherMove(moves);
+//		 System.out.println("Calcul White Fin");
 
 		return moves;
 	}
 
 	public static String calculB(Case[][] echiquier) {
-		System.out.println("Calcul Black Debut");
-		afficherEchiquier(echiquier);
+//		 System.out.println("Calcul Black Debut");
+//		 afficherEchiquier(echiquier);
 		String moves = Bishop(echiquier, false);
 		moves += Rook(echiquier, false);
 		moves += Queen(echiquier, false);
 		moves += Pawn(echiquier, false);
 		moves += Knight(echiquier, false);
 		moves += King(echiquier, false);
-		System.out.print("Recapitulatif des mouvements");
-		afficherMove(moves);
-		System.out.println("Calcul Black Fin");
+//		 System.out.print("Recapitulatif des mouvements");
+//		 afficherMove(moves);
+//		 System.out.println("Calcul Black Fin");
 
 		return moves;
 	}
@@ -1535,8 +1535,8 @@ public class Move {
 	 * @return Bouleen qui indique si la case i j est occupee par un ennemi
 	 */
 	private static Boolean isEnnemy(boolean white, Case[][] echiquier, int i, int j) {
-		if (echiquier[i][j].isOccupe() == 'v')
-			System.out.println("Erreur a is ennemy");
+		// if (echiquier[i][j].isOccupe() == 'v')
+		// System.out.println("Erreur a is ennemy");
 		return white ? Character.isLowerCase(echiquier[i][j].isOccupe())
 				: Character.isUpperCase(echiquier[i][j].isOccupe());
 	}
