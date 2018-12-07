@@ -296,7 +296,7 @@ public class Evaluation {
 
 	
 
-	public static int Best( Case[][] echiquier, boolean W)
+	public static int Best( Case[][] echiquier, boolean W,int tour)
 
 	{
 
@@ -316,23 +316,22 @@ public class Evaluation {
 
 				{
 
-					BlackScore+=echiquier[i][j].valeurCase();
-
+					//BlackScore+=echiquier[i][j].valeurCase();
 					switch(echiquier[i][j].isOccupe())
 
 					{
 
-					case 'p': BlackScore+= Pawn[0][i][j];
+					case 'p': BlackScore+= (Pawn[0][i][j])*echiquier[i][j].valeurCase();
 
-					case 'c': BlackScore+= Knight[0][i][j];
+					case 'c': BlackScore+= (Knight[0][i][j])*echiquier[i][j].valeurCase();
 
-					case 'f': BlackScore+= Bishop[0][i][j];
+					case 'f': BlackScore+= (Bishop[0][i][j]*echiquier[i][j].valeurCase());
 
-					case 't': BlackScore+= Rook[0][i][j];
+					case 't': BlackScore+= (Rook[0][i][j]*echiquier[i][j].valeurCase());
 
-					case 'd': BlackScore+= Queen[0][i][j];
+					case 'd': BlackScore+= Queen[0][i][j]*echiquier[i][j].valeurCase();
 
-					case 'r': BlackScore+= King[0][i][j];
+					case 'r': BlackScore+= King[0][i][j]*echiquier[i][j].valeurCase();
 
 					default: break;
 
@@ -342,23 +341,23 @@ public class Evaluation {
 
 				else {
 
-					WhiteScore+=echiquier[i][j].valeurCase();
+					//WhiteScore+=echiquier[i][j].valeurCase();
 
 					switch(echiquier[i][j].isOccupe())
 
 					{
 
-					case 'P': WhiteScore+= Pawn[1][i][j];
+					case 'P': WhiteScore+= Pawn[1][i][j]*echiquier[i][j].valeurCase();
 
-					case 'C': WhiteScore+= Knight[1][i][j];
+					case 'C': WhiteScore+= Knight[1][i][j]*echiquier[i][j].valeurCase();
 
-					case 'F': WhiteScore+= Bishop[1][i][j];
+					case 'F': WhiteScore+= Bishop[1][i][j]*echiquier[i][j].valeurCase();
 
-					case 'T': WhiteScore+= Rook[1][i][j];
+					case 'T': WhiteScore+= Rook[1][i][j]*echiquier[i][j].valeurCase();
 
-					case 'D': WhiteScore+= Queen[1][i][j];
+					case 'D': WhiteScore+= Queen[1][i][j]*echiquier[i][j].valeurCase();
 
-					case 'R': WhiteScore+= King[1][i][j];
+					case 'R': WhiteScore+= King[1][i][j]*echiquier[i][j].valeurCase();
 
 					default: break;
 
