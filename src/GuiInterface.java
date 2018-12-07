@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.management.ManagementFactory;
 
 public class GuiInterface {
 	static long WK = 0l, WQ = 0l, WR = 0l, WB = 0l, WN = 0l, WP = 0l;
@@ -23,18 +24,48 @@ public class GuiInterface {
 				fos.write("\n".getBytes("UTF-8"));
 				if (inputcmd.equals("uci")) {
 					outputUCI();
+//					String pidS = ManagementFactory.getRuntimeMXBean().getName();
+//					String[] parts = pidS.split("@");
+//					String pid=parts[0];
+//					Runtime runtime = Runtime.getRuntime();
+//					try {
+//						String commande="py.exe .\\killer.py "+pid;
+//						runtime.exec(commande);
+//					} catch (IOException e1) {
+//						e1.printStackTrace();
+//					}
 				}
 				if (inputcmd.startsWith("setoptions")) {
 					// setOptions(); //Not supported now
 				}
 				if (inputcmd.equals("isready")) {
 					System.out.println("readyok");
+//					String pidS = ManagementFactory.getRuntimeMXBean().getName();
+//					String[] parts = pidS.split("@");
+//					String pid=parts[0];
+//					Runtime runtime = Runtime.getRuntime();
+//					try {
+//						String commande="py.exe .\\killer.py "+pid;
+//						runtime.exec(commande);
+//					} catch (IOException e1) {
+//						e1.printStackTrace();
+//					}
 				}
 				if (inputcmd.equals("ucinewgame")) {
 					// resettheboard(); // not supported now
 				}
 				if (inputcmd.startsWith("position")) {
 					setposition(inputcmd);
+//					String pidS = ManagementFactory.getRuntimeMXBean().getName();
+//					String[] parts = pidS.split("@");
+//					String pid=parts[0];
+//					Runtime runtime = Runtime.getRuntime();
+//					try {
+//						String commande="py.exe .\\killer.py "+pid;
+//						runtime.exec(commande);
+//					} catch (IOException e1) {
+//						e1.printStackTrace();
+//					}
 				}
 				if (inputcmd.startsWith("go")) {
 					outputbestmove();
@@ -57,8 +88,8 @@ public class GuiInterface {
 	}
 
 	static void outputUCI() {
-		System.out.println("id name VarunChess");
-		System.out.println("id author Varun");
+		System.out.println("id name XANA");
+		System.out.println("id author Franz Hopper");
 		System.out.println("uciok");
 	}
 
@@ -96,6 +127,19 @@ public class GuiInterface {
 		try {
 			// fichier pour voir les logs de ce qu'il se passe
 			fos = new FileOutputStream(new File("outlog2.txt"));
+			String pidS = ManagementFactory.getRuntimeMXBean().getName();
+			String[] parts = pidS.split("@");
+			String pid=parts[0];
+//			Runtime runtime = Runtime.getRuntime();
+//			try {
+//				String commande="py.exe .\\killer.py "+pid;
+//				runtime.exec(commande);
+//			} catch (IOException e1) {
+//				e1.printStackTrace();
+//			}
+			fos.write("PID = ".getBytes("UTF-8"));
+			fos.write(pid.getBytes("UTF-8"));
+			fos.write("\n\n".getBytes("UTF-8"));
 			String bestmove;
 			String send;
 			long startTime = System.currentTimeMillis(); // permet le calcul du temps

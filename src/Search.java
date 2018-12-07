@@ -117,8 +117,8 @@ public class Search {
 
 			boolean EstEnEchec = estEnEchec(echiquierTemp, W);
 
-//			 System.out.println("Mouvements verifie : " + move + " Est-il en echec ? " +
-//			 EstEnEchec);
+			// System.out.println("Mouvements verifie : " + move + " Est-il en echec ? " +
+			// EstEnEchec);
 
 			if (!EstEnEchec) {// Le roi n'est pas en echec dans le cas de ce mouvement
 				Bestmove = SuperMinMax_Alpha_Beta_Gamma_Omega(alpha, beta, echiquierTemp, !W, prof + 1, move);

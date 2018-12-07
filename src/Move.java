@@ -994,153 +994,152 @@ public class Move {
 	/**
 	 * @param echiquier
 	 * @param white
-	 * @param tab
 	 * @return
 	 */
-	public static String Bishop(Case[][] echiquier, boolean white, int[] tab) {
+	public static String Bishop(Case[][] echiquier, boolean white) {
 
 		String move = "";
-		// char c = white ? 'F' : 'f';
+		char c = white ? 'F' : 'f';
 
-		// ArrayList<int[]> DepartureBox = calculDepartureBox(echiquier, c);
+		ArrayList<int[]> DepartureBox = calculDepartureBox(echiquier, c);
 		// System.out.println("size = " + DepartureBox.size());
-		// if (!DepartureBox.isEmpty()) {
-		// for (ArrayList<Integer> tab : DepartureBox) {
-		// for (int i = 0; i < DepartureBox.size(); i++) {
-		// tab[0] = DepartureBox.get(i).get(0);
-		// tab[1] = DepartureBox.get(i)[1];
-		// int[] tab = new int[2];
-		// tab = DepartureBox.get(i);
-		// System.out.println("aa " + IntToString(tab[0], tab[1]));
-		move += deplacementDiagonale(tab, white, echiquier);
-		// }
-		// }
-//		 System.out.print("Fou " + (white ? "white" : "black") + " ");
-//		 afficherMove(move);
+		if (!DepartureBox.isEmpty()) {
+			// for (ArrayList<Integer> tab : DepartureBox) {
+			for (int i = 0; i < DepartureBox.size(); i++) {
+				// tab[0] = DepartureBox.get(i).get(0);
+				// tab[1] = DepartureBox.get(i)[1];
+				int[] tab = new int[2];
+				tab = DepartureBox.get(i);
+				// System.out.println("aa " + IntToString(tab[0], tab[1]));
+				move += deplacementDiagonale(tab, white, echiquier);
+			}
+		}
+		// System.out.print("Fou " + (white ? "white" : "black") + " ");
+		// afficherMove(move);
 		return move;
 	}
 
-	public static String Rook(Case[][] echiquier, boolean white, int[] tab) {
+	public static String Rook(Case[][] echiquier, boolean white) {
 		String move = "";
-		// char c = white ? 'T' : 't';
-		//
-		// ArrayList<int[]> DepartureBox = calculDepartureBox(echiquier, c);
-		//
-		// if (!DepartureBox.isEmpty()) {
-		// for (int[] tab : DepartureBox) {
-		move += deplacementCroix(tab, white, echiquier);
-		// }
-		// }
-//		 System.out.print("Tour " + (white ? "white" : "black") + " ");
-//		 afficherMove(move);
+		char c = white ? 'T' : 't';
+
+		ArrayList<int[]> DepartureBox = calculDepartureBox(echiquier, c);
+
+		if (!DepartureBox.isEmpty()) {
+			for (int[] tab : DepartureBox) {
+				move += deplacementCroix(tab, white, echiquier);
+			}
+		}
+		// System.out.print("Tour " + (white ? "white" : "black") + " ");
+		// afficherMove(move);
 		return move;
 	}
 
-	public static String Queen(Case[][] echiquier, boolean white, int[] tab) {
+	public static String Queen(Case[][] echiquier, boolean white) {
 		String move = "";
-		// char c = white ? 'D' : 'd';
+		char c = white ? 'D' : 'd';
 
-		// ArrayList<int[]> DepartureBox = calculDepartureBox(echiquier, c);
-		// if (!DepartureBox.isEmpty()) {
-		// for (int[] tab : DepartureBox) {
-		move += deplacementDiagonale(tab, white, echiquier);
-		move += deplacementCroix(tab, white, echiquier);
-		// }
-		// }
-//		 System.out.print("Dame " + (white ? "white" : "black") + " ");
-//		 afficherMove(move);
+		ArrayList<int[]> DepartureBox = calculDepartureBox(echiquier, c);
+		if (!DepartureBox.isEmpty()) {
+			for (int[] tab : DepartureBox) {
+				move += deplacementDiagonale(tab, white, echiquier);
+				move += deplacementCroix(tab, white, echiquier);
+			}
+		}
+		// System.out.print("Dame " + (white ? "white" : "black") + " ");
+		// afficherMove(move);
 		return move;
 	}
 
-	public static String Pawn(Case[][] echiquier, boolean white, int[] tab) {
+	public static String Pawn(Case[][] echiquier, boolean white) {
 		String move = "";
-		// char c = white ? 'P' : 'p';
-		// ArrayList<int[]> DepartureBox = calculDepartureBox(echiquier, c);
-		//
-		// if (!DepartureBox.isEmpty()) {
-		// for (int[] tab : DepartureBox) {
-		move += deplacementPion(tab, white, echiquier);
-		// }
-		// }
-//		 System.out.print("Pion " + (white ? "white" : "black") + " ");
-//		 afficherMove(move);
+		char c = white ? 'P' : 'p';
+		ArrayList<int[]> DepartureBox = calculDepartureBox(echiquier, c);
+
+		if (!DepartureBox.isEmpty()) {
+			for (int[] tab : DepartureBox) {
+				move += deplacementPion(tab, white, echiquier);
+			}
+		}
+		// System.out.print("Pion " + (white ? "white" : "black") + " ");
+		// afficherMove(move);
 		return move;
 	}
 
-	public static String King(Case[][] echiquier, boolean white, int[] tab) {
+	public static String King(Case[][] echiquier, boolean white) {
 		String move = "";
-		// char c = white ? 'R' : 'r';
-		//
-		// ArrayList<int[]> DepartureBox = calculDepartureBox(echiquier, c);
-		//
-		// if (!DepartureBox.isEmpty()) {
-		// for (int[] tab : DepartureBox) {
+		char c = white ? 'R' : 'r';
 
-		// Deplacement de 1 a droite et 1 en-bas
-		move += caseEstDiponible(echiquier, tab[0] + 1, tab[1] + 1, white, tab)[1];
+		ArrayList<int[]> DepartureBox = calculDepartureBox(echiquier, c);
 
-		// Deplacement de 1 a droite
-		move += caseEstDiponible(echiquier, tab[0], tab[1] + 1, white, tab)[1];
+		if (!DepartureBox.isEmpty()) {
+			for (int[] tab : DepartureBox) {
 
-		// Deplacement de 1 a droite et 1 en-haut
-		move += caseEstDiponible(echiquier, tab[0] - 1, tab[1] + 1, white, tab)[1];
+				// Deplacement de 1 a droite et 1 en-bas
+				move += caseEstDiponible(echiquier, tab[0] + 1, tab[1] + 1, white, tab)[1];
 
-		// Deplacement de 1 en-haut
-		move += caseEstDiponible(echiquier, tab[0] - 1, tab[1], white, tab)[1];
+				// Deplacement de 1 a droite
+				move += caseEstDiponible(echiquier, tab[0], tab[1] + 1, white, tab)[1];
 
-		// Deplacement de 1 a gauche et 1 en-haut
-		move += caseEstDiponible(echiquier, tab[0] - 1, tab[1] - 1, white, tab)[1];
+				// Deplacement de 1 a droite et 1 en-haut
+				move += caseEstDiponible(echiquier, tab[0] - 1, tab[1] + 1, white, tab)[1];
 
-		// Deplacement de 1 a gauche
-		move += caseEstDiponible(echiquier, tab[0], tab[1] - 1, white, tab)[1];
+				// Deplacement de 1 en-haut
+				move += caseEstDiponible(echiquier, tab[0] - 1, tab[1], white, tab)[1];
 
-		// Deplacement de 1 en-bas et 1 a gauche
-		move += caseEstDiponible(echiquier, tab[0] + 1, tab[1] - 1, white, tab)[1];
+				// Deplacement de 1 a gauche et 1 en-haut
+				move += caseEstDiponible(echiquier, tab[0] - 1, tab[1] - 1, white, tab)[1];
 
-		// Deplacement de 1 en-bas
-		move += caseEstDiponible(echiquier, tab[0] + 1, tab[1], white, tab)[1];
-		// }
-		// }
+				// Deplacement de 1 a gauche
+				move += caseEstDiponible(echiquier, tab[0], tab[1] - 1, white, tab)[1];
 
-//		 System.out.print("Roi " + (white ? "white" : "black") + " ");
-//		 afficherMove(move);
+				// Deplacement de 1 en-bas et 1 a gauche
+				move += caseEstDiponible(echiquier, tab[0] + 1, tab[1] - 1, white, tab)[1];
+
+				// Deplacement de 1 en-bas
+				move += caseEstDiponible(echiquier, tab[0] + 1, tab[1], white, tab)[1];
+			}
+		}
+
+		// System.out.print("Roi " + (white ? "white" : "black") + " ");
+		// afficherMove(move);
 		return move;
 	}
 
-	public static String Knight(Case[][] echiquier, boolean white, int[] tab) {
+	public static String Knight(Case[][] echiquier, boolean white) {
 		String move = "";
-		// char c = white ? 'C' : 'c';
-		//
-		// ArrayList<int[]> DepartureBox = calculDepartureBox(echiquier, c);
-		//
-		// if (!DepartureBox.isEmpty()) {
-		// for (int[] tab : DepartureBox) {
-		// Deplacement de 2 a droite et 1 en-bas
-		move += caseEstDiponible(echiquier, tab[0] + 1, tab[1] + 2, white, tab)[1];
+		char c = white ? 'C' : 'c';
 
-		// Deplacement de 2 a droite et 1 en-haut
-		move += caseEstDiponible(echiquier, tab[0] - 1, tab[1] + 2, white, tab)[1];
+		ArrayList<int[]> DepartureBox = calculDepartureBox(echiquier, c);
 
-		// Deplacement de 2 en-haut et 1 a droite
-		move += caseEstDiponible(echiquier, tab[0] - 2, tab[1] + 1, white, tab)[1];
+		if (!DepartureBox.isEmpty()) {
+			for (int[] tab : DepartureBox) {
+				// Deplacement de 2 a droite et 1 en-bas
+				move += caseEstDiponible(echiquier, tab[0] + 1, tab[1] + 2, white, tab)[1];
 
-		// Deplacement de 2 en-haut et 1 a gauche
-		move += caseEstDiponible(echiquier, tab[0] - 2, tab[1] - 1, white, tab)[1];
+				// Deplacement de 2 a droite et 1 en-haut
+				move += caseEstDiponible(echiquier, tab[0] - 1, tab[1] + 2, white, tab)[1];
 
-		// Deplacement de 2 a gauche et 1 en-haut
-		move += caseEstDiponible(echiquier, tab[0] - 1, tab[1] - 2, white, tab)[1];
+				// Deplacement de 2 en-haut et 1 a droite
+				move += caseEstDiponible(echiquier, tab[0] - 2, tab[1] + 1, white, tab)[1];
 
-		// Deplacement de 2 a gauche et 1 en-bas
-		move += caseEstDiponible(echiquier, tab[0] + 1, tab[1] - 2, white, tab)[1];
+				// Deplacement de 2 en-haut et 1 a gauche
+				move += caseEstDiponible(echiquier, tab[0] - 2, tab[1] - 1, white, tab)[1];
 
-		// Deplacement de 2 en-bas et 1 a gauche
-		move += caseEstDiponible(echiquier, tab[0] + 2, tab[1] - 1, white, tab)[1];
+				// Deplacement de 2 a gauche et 1 en-haut
+				move += caseEstDiponible(echiquier, tab[0] - 1, tab[1] - 2, white, tab)[1];
 
-		// Deplacement de 2 en-bas et 1 a droite
-		move += caseEstDiponible(echiquier, tab[0] + 2, tab[1] + 1, white, tab)[1];
+				// Deplacement de 2 a gauche et 1 en-bas
+				move += caseEstDiponible(echiquier, tab[0] + 1, tab[1] - 2, white, tab)[1];
 
-		// }
-		// }
+				// Deplacement de 2 en-bas et 1 a gauche
+				move += caseEstDiponible(echiquier, tab[0] + 2, tab[1] - 1, white, tab)[1];
+
+				// Deplacement de 2 en-bas et 1 a droite
+				move += caseEstDiponible(echiquier, tab[0] + 2, tab[1] + 1, white, tab)[1];
+
+			}
+		}
 		// System.out.print("Cavalier " + (white ? "white" : "black") + " ");
 		// afficherMove(move);
 		return move;
@@ -1498,39 +1497,12 @@ public class Move {
 //		 System.out.println("Calcul White Debut");
 //		 afficherEchiquier(echiquier);
 
-		// String moves = Bishop(echiquier, true);
-		// moves += Rook(echiquier, true);
-		// moves += Queen(echiquier, true);
-		// moves += Pawn(echiquier, true);
-		// moves += Knight(echiquier, true);
-		// moves += King(echiquier, true);
-		String moves = "";
-		for (int i = 0; i < echiquier.length; i++) {
-			for (int j = 0; j < echiquier.length; j++) {
-				switch (echiquier[i][j].isOccupe()) {
-				case 'R':
-					moves += King(echiquier, true, new int[] { i, j });
-					break;
-				case 'D':
-					moves += Queen(echiquier, true, new int[] { i, j });
-					break;
-				case 'F':
-					moves += Bishop(echiquier, true, new int[] { i, j });
-					break;
-				case 'C':
-					moves += Knight(echiquier, true, new int[] { i, j });
-					break;
-				case 'P':
-					moves += Pawn(echiquier, true, new int[] { i, j });
-					break;
-				case 'T':
-					moves += Rook(echiquier, true, new int[] { i, j });
-					break;
-				default:
-					break;
-				}
-			}
-		}
+		String moves = Bishop(echiquier, true);
+		moves += Rook(echiquier, true);
+		moves += Queen(echiquier, true);
+		moves += Pawn(echiquier, true);
+		moves += Knight(echiquier, true);
+		moves += King(echiquier, true);
 //		 System.out.print("Recapitulatif des mouvements");
 //		 afficherMove(moves);
 //		 System.out.println("Calcul White Fin");
@@ -1541,34 +1513,12 @@ public class Move {
 	public static String calculB(Case[][] echiquier) {
 //		 System.out.println("Calcul Black Debut");
 //		 afficherEchiquier(echiquier);
-		String moves = "";
-		for (int i = 0; i < echiquier.length; i++) {
-			for (int j = 0; j < echiquier.length; j++) {
-				switch (echiquier[i][j].isOccupe()) {
-				case 'r':
-					moves += King(echiquier, false, new int[] { i, j });
-					break;
-				case 'd':
-					moves += Queen(echiquier, false, new int[] { i, j });
-					break;
-				case 'f':
-					moves += Bishop(echiquier, false, new int[] { i, j });
-					break;
-				case 'c':
-					moves += Knight(echiquier, false, new int[] { i, j });
-					break;
-				case 'p':
-					moves += Pawn(echiquier, false, new int[] { i, j });
-					break;
-				case 't':
-					moves += Rook(echiquier, false, new int[] { i, j });
-					break;
-				default:
-					break;
-				}
-			}
-		}
-		// ArrayList<int[]> DepartureBox = calculDepartureBox(echiquier, c);
+		String moves = Bishop(echiquier, false);
+		moves += Rook(echiquier, false);
+		moves += Queen(echiquier, false);
+		moves += Pawn(echiquier, false);
+		moves += Knight(echiquier, false);
+		moves += King(echiquier, false);
 //		 System.out.print("Recapitulatif des mouvements");
 //		 afficherMove(moves);
 //		 System.out.println("Calcul Black Fin");
@@ -1606,11 +1556,11 @@ public class Move {
 	}
 
 	public static void afficherMove(String moves) {
-		System.out.print(" : Mouvements = ");
+		System.out.println(" : Mouvements = ");
 		for (int i = 0; i <= moves.length() - 4; i += 4) {
 			System.out.print(moves.substring(i, i + 4) + ", ");
 		}
-		System.out.println("");
+		System.out.println("\n");
 
 	}
 }

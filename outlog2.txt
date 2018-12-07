@@ -1,1 +1,3 @@
-bestmove f8f8
+PIDS = 10748@DESKTOP-BK174VV
+
+bestmove h3h6
