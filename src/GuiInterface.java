@@ -137,9 +137,9 @@ public class GuiInterface {
 //			} catch (IOException e1) {
 //				e1.printStackTrace();
 //			}
-			fos.write("PID = ".getBytes("UTF-8"));
-			fos.write(pid.getBytes("UTF-8"));
-			fos.write("\n\n".getBytes("UTF-8"));
+//			fos.write("PID = ".getBytes("UTF-8"));
+//			fos.write(pid.getBytes("UTF-8"));
+//			fos.write("\n\n".getBytes("UTF-8"));
 			String bestmove;
 			String send;
 			long startTime = System.currentTimeMillis(); // permet le calcul du temps

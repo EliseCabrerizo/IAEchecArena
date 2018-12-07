@@ -10,7 +10,7 @@ public class Case {
 
 	public static final int FOU = 500;
 
-	public static final int TOUR = 800;
+	public static final int TOUR = 500;
 
 	public static final int DAME = 1750;
 

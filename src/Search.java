@@ -4,7 +4,7 @@ import com.sun.xml.internal.ws.dump.LoggingDumpTube.Position;
 
 public class Search {
 
-	public static int Max_depth = 4;
+	public static int Max_depth = 2;
 
 	public static int White = 1;
 
@@ -81,10 +81,10 @@ public class Search {
 		} else {
 			mvtDispo = Move.calculB(echiquier);
 		}
-//		 System.out.println("\n\n\n");
+		 System.out.println("\n\n");
 //		 System.out.println("********************************************");
-//		 System.out.println("****Verification de tous les mouvements*****");
-//		 System.out.println("****Profondeur : " + prof + " ************************");
+		 System.out.println("****Verification de tous les mouvements*****");
+		 System.out.println("****Profondeur : " + prof + " ************************");
 //		 System.out.println("********************************************");
 		for (int i = 0; i <= mvtDispo.length() - 4; i += 4) {
 			String move = mvtDispo.substring(i, i + 4);
@@ -102,11 +102,12 @@ public class Search {
 			int[] tempFin = StringToInt(move.substring(2, 4));
 
 //			 System.out.println("\n\n\n");
-//			 System.out.println(
-//			 "Deplacement : " + move.substring(0, 2) + " " +
-//			 echiquierTemp[tempDebut[0]][tempDebut[1]].isOccupe()
-//			 + " => " + move.substring(2, 4) + " " +
-//			 echiquierTemp[tempFin[0]][tempFin[1]].isOccupe());
+			System.out.println();
+			 System.out.println(
+			 "Deplacement : " + move.substring(0, 2) + " " +
+			 echiquierTemp[tempDebut[0]][tempDebut[1]].isOccupe()
+			 + " => " + move.substring(2, 4) + " " +
+			 echiquierTemp[tempFin[0]][tempFin[1]].isOccupe());
 
 			// Sauvegarde de la piece mangee
 			char pieceRemplacee = echiquierTemp[tempFin[0]][tempFin[1]].isOccupe();
@@ -117,8 +118,8 @@ public class Search {
 
 			boolean EstEnEchec = estEnEchec(echiquierTemp, W);
 
-			// System.out.println("Mouvements verifie : " + move + " Est-il en echec ? " +
-			// EstEnEchec);
+//			 System.out.println("Mouvements verifie : " + move + " Est-il en echec ? " +
+//			 EstEnEchec);
 
 			if (!EstEnEchec) {// Le roi n'est pas en echec dans le cas de ce mouvement
 				Bestmove = SuperMinMax_Alpha_Beta_Gamma_Omega(alpha, beta, echiquierTemp, !W, prof + 1, move);
@@ -126,6 +127,8 @@ public class Search {
 				// Renvoie le score du mouvement, il se situe après le mouvement donc après 4
 				bestScore = Integer.valueOf(Bestmove.substring(4));
 
+				System.out.println("Bestmove == "+Bestmove);
+				System.out.println("Bestscore == "+bestScore);
 				if (!W) { // fait le changement alpha beta, en fct de quel joueur on calcul
 					if (bestScore < beta) {
 						beta = bestScore;
@@ -140,8 +143,10 @@ public class Search {
 
 				if (alpha >= beta) {
 					if (!W) {
+						System.out.println(betamove + beta);
 						return betamove + beta;
 					} else {
+						System.out.println(alphamove + alpha);
 						return alphamove + alpha;
 					}
 				}
@@ -154,8 +159,10 @@ public class Search {
 			echiquierTemp[tempFin[0]][tempFin[1]].setOccupe(pieceRemplacee);
 		}
 		if (!W) {
+			System.out.println(betamove + beta);
 			return betamove + beta;
 		} else {
+			System.out.println(alphamove + alpha);
 			return alphamove + alpha;
 		}
 	}
