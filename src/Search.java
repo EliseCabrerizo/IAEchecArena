@@ -4,7 +4,7 @@ import com.sun.xml.internal.ws.dump.LoggingDumpTube.Position;
 
 public class Search {
 
-	public static int Max_depth = 2;
+	public static int Max_depth = 4;
 
 	public static int White = 1;
 
@@ -60,8 +60,93 @@ public class Search {
 			}
 		}
 
-		String bestmove = SuperMinMax_Alpha_Beta_Gamma_Omega(-100000, 100000, echiquier, WhiteMove, depth, ""); // min_maxAlphaBeta
+		String bestmove = AlphaBetaSearch(echiquier, depth, WhiteMove); // min_maxAlphaBeta
 		return bestmove;
+	}
+
+	public static String AlphaBetaSearch(Case[][] echiquier, int prof, boolean W) {
+		String mvt = MaxValue(echiquier, -150000, 150000, prof, "", W);
+		return mvt.substring(0, 4);
+	}
+
+	private static String MaxValue(Case[][] echiquier, int a, int b, int prof, String bestMove, boolean W) {
+
+		int bestScore = 0;
+		if (prof == Max_depth) {
+			bestScore = Evaluation.Best(echiquier, W);
+			return bestMove + bestScore;
+		}
+		int v = -150000;
+		String mvtDispo = "";
+		if (W) {
+			mvtDispo = Move.calculW(echiquier);
+		} else {
+			mvtDispo = Move.calculB(echiquier);
+		}
+		String move = "";
+		for (int i1 = 0; i1 <= mvtDispo.length() - 4; i1 += 4) {
+			move = mvtDispo.substring(i1, i1 + 4);
+			Case[][] echiquierTemp = new Case[8][8];
+
+			// Copie de l'echiqiuer dans un echiqiuer temporaire
+			for (int m = 0; m < echiquierTemp.length; m++) {
+				for (int n = 0; n < echiquierTemp.length; n++) {
+					echiquierTemp[m][n] = echiquier[m][n];
+				}
+			}
+			// Transforme le mouvement en position de matrice de la forme i j
+			int[] tempDebut = StringToInt(move.substring(0, 2));
+			int[] tempFin = StringToInt(move.substring(2, 4));
+
+			// Execution du mouvement
+			echiquierTemp[tempFin[0]][tempFin[1]].setOccupe(echiquierTemp[tempDebut[0]][tempDebut[1]].isOccupe());
+			echiquierTemp[tempDebut[0]][tempDebut[1]].setOccupe('v');
+
+			v = Math.max(v, new Integer(MinValue(echiquierTemp, a, b, prof+1, move, !W).substring(4)));
+			if (v >= b)
+				return move + v;
+			a = Math.max(a, v);
+		}
+		return move + v;
+	}
+
+	private static String MinValue(Case[][] echiquier, int a, int b, int prof, String bestMove, boolean W) {
+		int bestScore = 0;
+		if (prof == Max_depth) {
+			bestScore = Evaluation.Best(echiquier, W);
+			return bestMove + bestScore;
+		}
+		int v = -150000;
+		String mvtDispo = "";
+		if (W) {
+			mvtDispo = Move.calculW(echiquier);
+		} else {
+			mvtDispo = Move.calculB(echiquier);
+		}
+		String move = "";
+		for (int i1 = 0; i1 <= mvtDispo.length() - 4; i1 += 4) {
+			move = mvtDispo.substring(i1, i1 + 4);
+			Case[][] echiquierTemp = new Case[8][8];
+
+			// Copie de l'echiqiuer dans un echiqiuer temporaire
+			for (int m = 0; m < echiquierTemp.length; m++)
+				for (int n = 0; n < echiquierTemp.length; n++) {
+					echiquierTemp[m][n] = echiquier[m][n];
+				}
+			// Transforme le mouvement en position de matrice de la forme i j
+			int[] tempDebut = StringToInt(move.substring(0, 2));
+			int[] tempFin = StringToInt(move.substring(2, 4));
+
+			// Execution du mouvement
+			echiquierTemp[tempFin[0]][tempFin[1]].setOccupe(echiquierTemp[tempDebut[0]][tempDebut[1]].isOccupe());
+			echiquierTemp[tempDebut[0]][tempDebut[1]].setOccupe('v');
+
+			v = Math.min(v, new Integer(MaxValue(echiquierTemp, a, b, prof+1, move, !W).substring(4)));
+			if (v <= a)
+				return move + v;
+			b = Math.min(b, v);
+		}
+		return move + v;
 	}
 
 	public static String SuperMinMax_Alpha_Beta_Gamma_Omega(int alpha, int beta, Case[][] echiquier, boolean W,
@@ -81,10 +166,10 @@ public class Search {
 		} else {
 			mvtDispo = Move.calculB(echiquier);
 		}
-		 System.out.println("\n\n");
+//		 System.out.println("\n\n\n");
 //		 System.out.println("********************************************");
-		 System.out.println("****Verification de tous les mouvements*****");
-		 System.out.println("****Profondeur : " + prof + " ************************");
+//		 System.out.println("****Verification de tous les mouvements*****");
+//		 System.out.println("****Profondeur : " + prof + " ************************");
 //		 System.out.println("********************************************");
 		for (int i = 0; i <= mvtDispo.length() - 4; i += 4) {
 			String move = mvtDispo.substring(i, i + 4);
@@ -102,12 +187,11 @@ public class Search {
 			int[] tempFin = StringToInt(move.substring(2, 4));
 
 //			 System.out.println("\n\n\n");
-			System.out.println();
-			 System.out.println(
-			 "Deplacement : " + move.substring(0, 2) + " " +
-			 echiquierTemp[tempDebut[0]][tempDebut[1]].isOccupe()
-			 + " => " + move.substring(2, 4) + " " +
-			 echiquierTemp[tempFin[0]][tempFin[1]].isOccupe());
+//			 System.out.println(
+//			 "Deplacement : " + move.substring(0, 2) + " " +
+//			 echiquierTemp[tempDebut[0]][tempDebut[1]].isOccupe()
+//			 + " => " + move.substring(2, 4) + " " +
+//			 echiquierTemp[tempFin[0]][tempFin[1]].isOccupe());
 
 			// Sauvegarde de la piece mangee
 			char pieceRemplacee = echiquierTemp[tempFin[0]][tempFin[1]].isOccupe();
@@ -118,8 +202,8 @@ public class Search {
 
 			boolean EstEnEchec = estEnEchec(echiquierTemp, W);
 
-//			 System.out.println("Mouvements verifie : " + move + " Est-il en echec ? " +
-//			 EstEnEchec);
+			// System.out.println("Mouvements verifie : " + move + " Est-il en echec ? " +
+			// EstEnEchec);
 
 			if (!EstEnEchec) {// Le roi n'est pas en echec dans le cas de ce mouvement
 				Bestmove = SuperMinMax_Alpha_Beta_Gamma_Omega(alpha, beta, echiquierTemp, !W, prof + 1, move);
@@ -127,8 +211,6 @@ public class Search {
 				// Renvoie le score du mouvement, il se situe après le mouvement donc après 4
 				bestScore = Integer.valueOf(Bestmove.substring(4));
 
-				System.out.println("Bestmove == "+Bestmove);
-				System.out.println("Bestscore == "+bestScore);
 				if (!W) { // fait le changement alpha beta, en fct de quel joueur on calcul
 					if (bestScore < beta) {
 						beta = bestScore;
@@ -143,10 +225,8 @@ public class Search {
 
 				if (alpha >= beta) {
 					if (!W) {
-						System.out.println(betamove + beta);
 						return betamove + beta;
 					} else {
-						System.out.println(alphamove + alpha);
 						return alphamove + alpha;
 					}
 				}
@@ -159,18 +239,15 @@ public class Search {
 			echiquierTemp[tempFin[0]][tempFin[1]].setOccupe(pieceRemplacee);
 		}
 		if (!W) {
-			System.out.println(betamove + beta);
 			return betamove + beta;
 		} else {
-			System.out.println(alphamove + alpha);
 			return alphamove + alpha;
 		}
 	}
 
 	/**
 	 * 
-	 * @param mvt
-	 *            lettre de la colonne + numero de la ligne
+	 * @param mvt lettre de la colonne + numero de la ligne
 	 * @return Un tableau de deux entiers representant le numero de la ligne et de
 	 *         la colonne d'une matrice. Exemple : "a8" => "00" ou "h1" => "77"
 	 */
@@ -202,11 +279,9 @@ public class Search {
 
 	/**
 	 * 
-	 * @param echiquierTemp
-	 *            Echiqiuer modifie par le mouvement qu'on desire verifier sa
-	 *            faisabilite
-	 * @param white
-	 *            Couleur du roi
+	 * @param echiquierTemp Echiqiuer modifie par le mouvement qu'on desire verifier
+	 *                      sa faisabilite
+	 * @param white         Couleur du roi
 	 * @return Vrai si le roi de la couleur white est en echec, Faux si le roi n'est
 	 *         pas en echec
 	 */
