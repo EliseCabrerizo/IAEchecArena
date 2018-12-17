@@ -4,17 +4,17 @@ import java.util.ArrayList;
 
 public class Case {
 
-	public static final int PION = 100;
+	public static final int PION = 200;
 
-	public static final int CAVALIER = 350;
+	public static final int CAVALIER = 520;
 
-	public static final int FOU = 500;
+	public static final int FOU = 510;
 
-	public static final int TOUR = 500;
+	public static final int TOUR = 333;
 
-	public static final int DAME = 1750;
+	public static final int DAME = 880;
 
-	public static final int ROI = 5000;
+	public static final int ROI = 100;
 
 	private char occupe;
 

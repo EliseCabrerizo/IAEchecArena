@@ -101,11 +101,16 @@ public class Search {
 			// Execution du mouvement
 			echiquierTemp[tempFin[0]][tempFin[1]].setOccupe(echiquierTemp[tempDebut[0]][tempDebut[1]].isOccupe());
 			echiquierTemp[tempDebut[0]][tempDebut[1]].setOccupe('v');
+			// if (!estEnEchec(echiquierTemp, W)) {
+			v = Math.max(v, new Integer(MinValue(echiquierTemp, a, b, prof + 1, move, !W).substring(4)));
+			// } else {
+			// v = -150000;
+			// }
 
-			v = Math.max(v, new Integer(MinValue(echiquierTemp, a, b, prof+1, move, !W).substring(4)));
 			if (v >= b)
 				return move + v;
 			a = Math.max(a, v);
+
 		}
 		return move + v;
 	}
@@ -116,7 +121,7 @@ public class Search {
 			bestScore = Evaluation.Best(echiquier, W);
 			return bestMove + bestScore;
 		}
-		int v = -150000;
+		int v = 150000;
 		String mvtDispo = "";
 		if (W) {
 			mvtDispo = Move.calculW(echiquier);
@@ -141,7 +146,11 @@ public class Search {
 			echiquierTemp[tempFin[0]][tempFin[1]].setOccupe(echiquierTemp[tempDebut[0]][tempDebut[1]].isOccupe());
 			echiquierTemp[tempDebut[0]][tempDebut[1]].setOccupe('v');
 
-			v = Math.min(v, new Integer(MaxValue(echiquierTemp, a, b, prof+1, move, !W).substring(4)));
+			// if (!estEnEchec(echiquierTemp, W)) {
+			v = Math.min(v, new Integer(MaxValue(echiquierTemp, a, b, prof + 1, move, !W).substring(4)));
+			// } else {
+			// v = 150000;
+			// }
 			if (v <= a)
 				return move + v;
 			b = Math.min(b, v);
@@ -149,105 +158,10 @@ public class Search {
 		return move + v;
 	}
 
-	public static String SuperMinMax_Alpha_Beta_Gamma_Omega(int alpha, int beta, Case[][] echiquier, boolean W,
-			int prof, String mvt) {
-		String Bestmove = " ";
-		int bestScore = 0;
-		String mvtDispo = "";
-		String alphamove = "0000";
-		String betamove = "0000";
-		if (prof == Max_depth) { // si on a atteint la prof max on va evaluer le meilleur coup ??
-			bestScore = Evaluation.Best(echiquier, W);
-			Bestmove = mvt + bestScore;
-			return Bestmove;
-		}
-		if (W) {
-			mvtDispo = Move.calculW(echiquier);
-		} else {
-			mvtDispo = Move.calculB(echiquier);
-		}
-//		 System.out.println("\n\n\n");
-//		 System.out.println("********************************************");
-//		 System.out.println("****Verification de tous les mouvements*****");
-//		 System.out.println("****Profondeur : " + prof + " ************************");
-//		 System.out.println("********************************************");
-		for (int i = 0; i <= mvtDispo.length() - 4; i += 4) {
-			String move = mvtDispo.substring(i, i + 4);
-			Case[][] echiquierTemp = new Case[8][8];
-
-			// Copie de l'echiqiuer dans un echiqiuer temporaire
-			for (int m = 0; m < echiquierTemp.length; m++) {
-				for (int n = 0; n < echiquierTemp.length; n++) {
-					echiquierTemp[m][n] = echiquier[m][n];
-				}
-			}
-
-			// Transforme le mouvement en position de matrice de la forme i j
-			int[] tempDebut = StringToInt(move.substring(0, 2));
-			int[] tempFin = StringToInt(move.substring(2, 4));
-
-//			 System.out.println("\n\n\n");
-//			 System.out.println(
-//			 "Deplacement : " + move.substring(0, 2) + " " +
-//			 echiquierTemp[tempDebut[0]][tempDebut[1]].isOccupe()
-//			 + " => " + move.substring(2, 4) + " " +
-//			 echiquierTemp[tempFin[0]][tempFin[1]].isOccupe());
-
-			// Sauvegarde de la piece mangee
-			char pieceRemplacee = echiquierTemp[tempFin[0]][tempFin[1]].isOccupe();
-
-			// Execution du mouvement
-			echiquierTemp[tempFin[0]][tempFin[1]].setOccupe(echiquierTemp[tempDebut[0]][tempDebut[1]].isOccupe());
-			echiquierTemp[tempDebut[0]][tempDebut[1]].setOccupe('v');
-
-			boolean EstEnEchec = estEnEchec(echiquierTemp, W);
-
-			// System.out.println("Mouvements verifie : " + move + " Est-il en echec ? " +
-			// EstEnEchec);
-
-			if (!EstEnEchec) {// Le roi n'est pas en echec dans le cas de ce mouvement
-				Bestmove = SuperMinMax_Alpha_Beta_Gamma_Omega(alpha, beta, echiquierTemp, !W, prof + 1, move);
-
-				// Renvoie le score du mouvement, il se situe après le mouvement donc après 4
-				bestScore = Integer.valueOf(Bestmove.substring(4));
-
-				if (!W) { // fait le changement alpha beta, en fct de quel joueur on calcul
-					if (bestScore < beta) {
-						beta = bestScore;
-						betamove = move;
-					}
-				} else {
-					if (bestScore > alpha) {
-						alpha = bestScore;
-						alphamove = move;
-					}
-				}
-
-				if (alpha >= beta) {
-					if (!W) {
-						return betamove + beta;
-					} else {
-						return alphamove + alpha;
-					}
-				}
-			}
-
-			// On revient en arriere
-			// La piece deplacee revient a sa place initiale.
-			echiquierTemp[tempDebut[0]][tempDebut[1]].setOccupe(echiquierTemp[tempFin[0]][tempFin[1]].isOccupe());
-			// La piece mangee revient sur le jeu
-			echiquierTemp[tempFin[0]][tempFin[1]].setOccupe(pieceRemplacee);
-		}
-		if (!W) {
-			return betamove + beta;
-		} else {
-			return alphamove + alpha;
-		}
-	}
-
 	/**
 	 * 
-	 * @param mvt lettre de la colonne + numero de la ligne
+	 * @param mvt
+	 *            lettre de la colonne + numero de la ligne
 	 * @return Un tableau de deux entiers representant le numero de la ligne et de
 	 *         la colonne d'une matrice. Exemple : "a8" => "00" ou "h1" => "77"
 	 */
@@ -260,28 +174,13 @@ public class Search {
 		return aRetourner;
 	}
 
-	public static int ischeck(long WK, long WQ, long WR, long WB, long WN, long WP, long BK, long BQ, long BR, long BB,
-			long BN, long BP, int player) {
-		int bestscore = 0;
-		// if(player == White){
-		long Blackatt_map = Move.attackbitmapB(WK, WQ, WR, WB, WN, WP, BK, BQ, BR, BB, BN, BP);
-		if ((WK & Blackatt_map) != 0) {
-			bestscore = 5000;
-		}
-		// }else{
-		long Whiteatt_map = Move.attackbitmapW(WK, WQ, WR, WB, WN, WP, BK, BQ, BR, BB, BN, BP);
-		if ((BK & Whiteatt_map) != 0) {
-			bestscore = -5000;
-		}
-		// }
-		return bestscore;
-	}
-
 	/**
 	 * 
-	 * @param echiquierTemp Echiqiuer modifie par le mouvement qu'on desire verifier
-	 *                      sa faisabilite
-	 * @param white         Couleur du roi
+	 * @param echiquierTemp
+	 *            Echiqiuer modifie par le mouvement qu'on desire verifier sa
+	 *            faisabilite
+	 * @param white
+	 *            Couleur du roi
 	 * @return Vrai si le roi de la couleur white est en echec, Faux si le roi n'est
 	 *         pas en echec
 	 */
